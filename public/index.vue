@@ -1,3 +1,4 @@
+
 const About = Vue.component('about', {
   template: '<h1>About</h1>'
 })
@@ -9,38 +10,30 @@ const Contact = Vue.component('contact', {
 const Account = Vue.component('account', {
   template: `<div>
 
-        <div class="hero-body herobg">
-          <div class="container has-text-centered">
-            <h1 class="title-index">
-              Welcome!
-            </h1>
-            <h2 class="subtitle-index">
-              Account Page
-            </h2>
+  <div class="section product-header">
+      <div class="container">
+        <div class="columns">
+          <div class="column">
+            <span class="title is-3">Account</span>
+            <span class="title is-3 has-text-muted">|</span>
+            <span class="title is-4 has-text-muted">André</span>
           </div>
         </div>
-
-        <div class="box cta">
-          <p class="has-text-centered">
-            Ut enim ad minim veniam, quis
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat.
-          </p>
-        </div>
-
+      </div>
+    </div>
 
         <div class="columns">
-        <div class="column is-2">
+        <div class="column is-3">
           <div class="panel">
             <p class="panel-heading">
               Privatkonto - 4569kr
             </p>
           </div>
         </div>
-        <div class="column is-2">
+        <div class="column is-3">
           <div class="panel">
             <p class="panel-heading">
-              Fondkonto - 68321
+              Fondkonto - 68321kr
             </p>
           </div>
         </div>
