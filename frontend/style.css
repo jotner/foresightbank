@@ -1,0 +1,44 @@
+.login {
+  background-image: url("media/bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body {
+  background-color: #ccc;
+}
+
+.avatar img {
+  height: 100px;
+  width: 100px;
+}
+
+.loginoptions a {
+  color: white;
+}
+
+.loginoptions a:hover {
+  color: #4a4a4a;
+}
+
+.title-index {
+  color: white;
+  font-size: 38px;
+}
+
+.subtitle-index {
+  color: white;
+  font-size: 22px;
+}
+
+.head-menu {
+  background-color: white;
+}
+
+.herobg {
+  background-image: url("media/herobg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
