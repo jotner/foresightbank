@@ -26,10 +26,8 @@
                   <li>
                     <router-link to="/contact">Contact</router-link>
                   </li>
-                </ul>
-
-                <span class="navbar-item">
-                  <router-link class="button is-black is-outlined" to="/login">
+                </ul>          
+                  <router-link to="/login">
                     <a>
                       <span class="icon">
                         <i class="fa fa-user"></i>
@@ -37,7 +35,6 @@
                       <span>Log In</span>
                     </a>
                   </router-link>
-                </span>
               </div>
             </div>
           </div>

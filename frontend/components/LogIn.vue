@@ -12,19 +12,19 @@
               <form>
                 <div class="field">
                   <div class="control">
-                    <input class="input is-large" type="email" placeholder="Your Email" autofocus="">
+                    <input class="input is-large" type="username" placeholder="Username" autofocus="">
                   </div>
                 </div>
                 <div class="field">
                   <div class="control">
-                    <input class="input is-large" type="password" placeholder="Your Password">
+                    <input class="input is-large" type="password" placeholder="Password">
                   </div>
                 </div>
-                <button class="button is-dark is-block loginblock is-large is-fullwidth">Login</button>
+                <button class="button is-block loginblock is-large is-fullwidth">Login</button><br>
+                  <button class="button is-block loginblock is-medium ">Sign Up</button>
               </form>
             </div>
             <p class="has-text loginoptions">
-              <a href="../">Sign Up</a> &nbsp;·&nbsp;
               <a href="../">Forgot Password</a> &nbsp;·&nbsp;
               <a href="../">Need Help?</a>
             </p>

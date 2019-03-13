@@ -30,6 +30,12 @@
           </ul>
         </div>
       </div>
+<br>
+            <div class="columns">
+        <div class="column has-text-centered is-full">
+        <h2>© 2019 Foresight Bank</h2>
+      </div>
+    </div>
     </div>
   </footer>
 </template>

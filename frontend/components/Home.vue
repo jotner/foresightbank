@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="hero-body herobg">
+    <div class="hero is-medium">
+    <div class="hero-body is-large herobg">
       <div class="container has-text-centered">
         <h1 class="title-index">
           A personal bank for everyday people
@@ -13,6 +14,7 @@
         </h2>
       </div>
     </div>
+  </div>
     <div class="box cta">
       <p class="has-text-centered">
         Ut enim ad minim veniam, quis
@@ -21,28 +23,34 @@
       </p>
     </div>
     <section class="container">
-      <div class="columns features">
-        <div class="column is-4">
+      <div class="columns">
+        <div class="column is-full">
           <div class="card is-shady">
             <div class="card-content">
               <div class="content">
-                <h4>Tristique senectus et netus et. </h4>
+                <h4><a href="#">Log in and explore our new website!</a></h4>
+                <p class="date">2019-03-12</p>
                 <p>
                   Purus semper eget duis at tellus at urna condimentum mattis.
                   Non blandit massa enim nec. Integer enim neque volutpat ac
                   tincidunt vitae semper quis. Accumsan tortor posuere ac ut
                   consequat semper viverra nam.
                 </p>
-                <p><a href="#">Learn more</a></p>
+                <p><a href="#">Read more</a></p>
               </div>
             </div>
           </div>
         </div>
-        <div class="column is-4">
+      </div>
+            <div class="columns">
+        <div class="column is-full">
           <div class="card is-shady">
             <div class="card-content">
+
               <div class="content">
-                <h4>Tempor orci dapibus ultrices in.</h4>
+
+                <h4><a href="#">A word from the CEO of Foresight Bank</a></h4>
+                <p class="date">2019-03-08</p>
                 <p>
                   Ut venenatis tellus in metus vulputate. Amet consectetur
                   adipiscing elit pellentesque. Sed arcu non odio euismod
@@ -50,54 +58,61 @@
                   neque egestas cmonsu songue. Phasellus vestibulum lorem
                   sed risus.
                 </p>
-                <p><a href="#">Learn more</a></p>
+                <p><a href="#">Read more</a></p>
               </div>
             </div>
           </div>
         </div>
-        <div class="column is-4">
+      </div>
+            <div class="columns">
+        <div class="column is-full">
           <div class="card is-shady">
             <div class="card-content">
               <div class="content">
-                <h4> Leo integer malesuada nunc vel risus. </h4>
+                <h4><a href="#">Your feedback is appreciated!</a></h4>
+                <p class="date">2019-02-27</p>
                 <p>
                   Imperdiet dui accumsan sit amet nulla facilisi morbi. Fusce
                   ut placerat orci nulla pellentesque dignissim enim. Libero id
                   faucibus nisl tincidunt eget nullam. Commodo viverra maecenas
                   accumsan lacus vel facilisis.
                 </p>
-                <p><a href="#">Learn more</a></p>
+                <p><a href="#">Read more</a></p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="intro column is-8 is-offset-2">
-        <h2 class="title">Perfect for developers or designers!</h2><br>
-        <p class="subtitle">
-          Vel fringilla est ullamcorper eget nulla facilisi.
-          Nulla facilisi nullam vehicula ipsum a. Neque egestas congue quisque
-          egestas diam in arcu cursus.
-        </p>
       </div>
       <div class="sandbox">
         <div class="tile is-ancestor">
           <div class="tile is-parent is-shady">
             <article class="tile is-child notification is-white">
-              <p class="title">Hello World</p>
-              <p class="subtitle">What is up?</p>
+              <p class="title">Savings</p>
+              <p class="subtitle">Save your income with your own savings account</p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Proin ornare magna eros, eu pellentesque tortor vestibulum
+                ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
+                facilisis.
+              </p>
             </article>
           </div>
           <div class="tile is-parent is-shady">
             <article class="tile is-child notification is-white">
-              <p class="title">Foo</p>
-              <p class="subtitle">Bar</p>
+              <p class="title">Loans</p>
+              <p class="subtitle">We have what you need</p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Proin ornare magna eros, eu pellentesque tortor vestibulum
+                ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
+                facilisis.
+              </p>
             </article>
           </div>
           <div class="tile is-parent is-shady">
             <article class="tile is-child notification is-white">
-              <p class="title">Third column</p>
-              <p class="subtitle">With some content</p>
+              <p class="title">Stock Market</p>
+              <p class="subtitle">Full-fledged interface</p>
               <div class="content">
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -108,142 +123,17 @@
               </div>
             </article>
           </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-vertical is-8">
-            <div class="tile">
-              <div class="tile is-parent is-vertical">
-                <article class="tile is-child notification is-white">
-                  <p class="title">Vertical tiles</p>
-                  <p class="subtitle">Top box</p>
-                </article>
-                <article class="tile is-child notification is-white">
-                  <p class="title">Vertical tiles</p>
-                  <p class="subtitle">Bottom box</p>
-                </article>
-              </div>
-              <div class="tile is-parent">
-                <article class="tile is-child notification is-white">
-                  <p class="title">Middle box</p>
-                  <p class="subtitle">With an image</p>
-                  <figure class="image is-4by3">
-                    <img src="https://picsum.photos/640/480/?random" alt="Description">
-                  </figure>
-                </article>
-              </div>
-            </div>
-            <div class="tile is-parent is-shady">
-              <article class="tile is-child notification is-white">
-                <p class="title">Wide column</p>
-                <p class="subtitle">Aligned with the right column</p>
-                <div class="content">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Proin ornare magna eros, eu pellentesque tortor vestibulum
-                    ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
-                    facilisis.
-                  </p>
-                </div>
-              </article>
-            </div>
-          </div>
-          <div class="tile is-parent is-shady">
-            <article class="tile is-child notification is-white">
-              <div class="content">
-                <p class="title">Tall column</p>
-                <p class="subtitle">With even more content</p>
-                <div class="content">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Etiam semper diam at erat pulvinar, at pulvinar felis
-                    blandit. Vestibulum volutpat tellus diam, consequat gravida
-                    libero rhoncus ut. Morbi maximus, leo sit amet vehicula
-                    eleifend, nunc dui porta orci, quis semper odio felis ut
-                    quam.
-                  </p>
-                  <p>
-                    Suspendisse varius ligula in molestie lacinia. Maecenas
-                    varius eget ligula a sagittis. Pellentesque interdum, nisl
-                    nec interdum maximus, augue diam porttitor lorem, et
-                    sollicitudin felis neque sit amet erat. Maecenas imperdiet
-                    felis nisi, fringilla luctus felis hendrerit sit amet.
-                    Aenean vitae gravida diam, finibus dignissim turpis. Sed
-                    eget varius ligula, at volutpat tortor.
-                  </p>
-                  <p>
-                    Integer sollicitudin, tortor a mattis commodo, velit urna
-                    rhoncus erat, vitae congue lectus dolor consequat libero.
-                    Donec leo ligula, maximus et pellentesque sed, gravida a
-                    metus. Cras ullamcorper a nunc ac porta. Aliquam
-                    ut aliquet lacus, quis faucibus libero. Quisque non semper
-                    leo.
-                  </p>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-parent is-shady">
-            <article class="tile is-child notification is-white">
-              <p class="title">Side column</p>
-              <p class="subtitle">With some content</p>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Proin ornare magna eros, eu pellentesque tortor vestibulum
-                  ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
-                  facilisis.
-                </p>
-              </div>
-            </article>
-          </div>
-          <div class="tile is-parent is-8 is-shady">
-            <article class="tile is-child notification is-white">
-              <p class="title">Main column</p>
-              <p class="subtitle">With some content</p>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Proin ornare magna eros, eu pellentesque tortor vestibulum
-                  ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
-                  facilisis.
-                </p>
-              </div>
-            </article>
-          </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-parent is-8 is-shady">
-            <article class="tile is-child notification is-white">
-              <p class="title">Murphy's law</p>
-              <p class="subtitle">Anything that can go wrong will go wrong</p>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Proin ornare magna eros, eu pellentesque tortor vestibulum
-                  ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
-                  facilisis.
-                </p>
-              </div>
-            </article>
-          </div>
-          <div class="tile is-parent is-shady">
-            <article class="tile is-child notification is-white">
-              <p class="title">Main column</p>
-              <p class="subtitle">With some content</p>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Proin ornare magna eros, eu pellentesque tortor vestibulum
-                  ut. Maecenas non massa sem. Etiam finibus odio quis feugiat
-                  facilisis.
-                </p>
-              </div>
-            </article>
-          </div>
-        </div>
+        </div><br>
       </div>
     </section>
+    <div class="hero is-small">
+    <div class="hero-body secbg">
+      <div class="container has-text-centered">
+        <h1 class="title-index">
+          Your money is safe with Foresight Secure
+        </h1>
+      </div>
+    </div>
+  </div>
   </div>
 </template>

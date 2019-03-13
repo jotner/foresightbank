@@ -9,27 +9,66 @@ body {
   background-color: #ccc;
 }
 
+a {
+  color: #23285b;
+}
+
+.button {
+  background-color: #23285b;
+  color: white;
+}
+
+.button:hover {
+  color: white;
+  background-color: #313672;
+}
+
+.tabs a:hover {
+  border-bottom-color: #23285b;
+}
+
 .avatar img {
   height: 100px;
   width: 100px;
 }
 
+.content h4 {
+  color: #23285b;
+}
+
+.notification .title {
+  color: #23285b;
+}
+
+.content figure {
+  margin-left: 0px;
+}
+
 .loginoptions a {
   color: white;
+  text-shadow: 1px 1px 1px black;
 }
 
 .loginoptions a:hover {
-  color: #4a4a4a;
+  color: #ccc;
 }
 
 .title-index {
   color: white;
   font-size: 38px;
+    text-shadow: 1px 1px 1px black;
 }
 
 .subtitle-index {
   color: white;
   font-size: 22px;
+    text-shadow: 1px 1px 1px black;
+}
+
+.date {
+  font-size: 12px;
+  color: #4c4c4c;
+  font-style: italic;
 }
 
 .head-menu {
@@ -38,6 +77,13 @@ body {
 
 .herobg {
   background-image: url("media/herobg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.secbg {
+  background-color: #23285b;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
