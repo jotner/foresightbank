@@ -5,7 +5,7 @@
         <div class="container">
           <div class="navbar-brand">
             <a class="navbar-item" href="../">
-              <h1>FORESIGHT BANK</h1>
+              <img src="media/foresight1.svg">
             </a>
             <span class="navbar-burger burger" data-target="navbarMenu">
               <span></span>
@@ -26,7 +26,7 @@
                   <li>
                     <router-link to="/contact">Contact</router-link>
                   </li>
-                </ul>          
+                </ul>
                   <router-link to="/login">
                     <a>
                       <span class="icon">
