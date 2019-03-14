@@ -14,12 +14,12 @@
     <div class="columns">
       <div class="column">
         <div class="panel">
-          <p class="panel-heading">
-            Privatkonto - 4569kr
+          <p class="panel-heading is-size-4">
+            <span>Privatkonto</span> - 4569kr
           </p>
         </div>
         <div class="panel">
-          <p class="panel-heading">
+          <p class="panel-heading is-size-4">
             Fondkonto - 68321kr
           </p>
         </div>
@@ -79,12 +79,26 @@
         </div>
       </div>
     </div>
+    <div id="securehero" class="hero is-small">
+    <div class="hero-body secbg">
+      <div class="container has-text-centered">
+        <h1 class="title-index">
+          Your account is safe with Foresight Secure
+        </h1>
+      </div>
+    </div>
+  </div>
   </div>
 
 </template>
 
 <style scoped>
-
+.panel-heading{
+  background-color: white;
+}
+#securehero {
+  padding-bottom: 10px;
+}
 </style>
 
 <script>
