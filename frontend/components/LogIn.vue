@@ -4,7 +4,7 @@
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4">
-            <h3 class="title has-text-dark">Foresight Bank</h3>
+              <img src="media/foresightloggasvart2.0.png">
             <div class="box">
               <figure class="avatar">
                 <img src="media/user.svg">
