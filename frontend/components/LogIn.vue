@@ -12,16 +12,16 @@
               <form>
                 <div class="field">
                   <div class="control">
-                    <input class="input is-large" type="username" placeholder="Username" autofocus="">
+                    <input v-model="username" class="input is-large" type="username" placeholder="Username">
                   </div>
                 </div>
                 <div class="field">
                   <div class="control">
-                    <input class="input is-large" type="password" placeholder="Password">
+                    <input v-model="password" class="input is-large" type="password" placeholder="Password">
                   </div>
                 </div>
-                <button class="button is-block loginblock is-large is-fullwidth">Login</button><br>
-                  <button class="button is-block loginblock is-medium ">Sign Up</button>
+                <button v-on:click="login" class="button is-block loginblock is-large is-fullwidth">Login</button><br>
+                  <router-link to="/register"><button class="button is-block loginblock is-medium ">Sign Up</button></router-link>
               </form>
             </div>
             <p class="has-text loginoptions">
@@ -34,3 +34,19 @@
     </section>
   </div>
 </template>
+
+<script>
+  export default {
+    data() {
+      return {
+        username: null,
+        password: null
+      }
+    },
+    methods: {
+      login() {
+        //najs
+      }
+    }
+  }
+</script>
