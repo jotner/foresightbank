@@ -34,43 +34,6 @@ const router = new VueRouter({
 })
 
 new Vue({
-  created() {
-    fetch('http://localhost:3000/users')
-    .then(response => response.json())
-    .then(result => {
-      this.users = result
-    })
-  },
-  data: {
-    users: null,
-    id: null,
-    userBalance: null,
-    stockBalance: null
-  },
-  methods: {
-    deposit: function() {
-      fetch('http://localhost:3000/users', {
-        body: JSON.stringify({
-          userBalance: this.userBalance,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST'
-      }).then(response => {
-        return response.text()
-      }).then(() => {
-        fetch('http://localhost:3000/users')
-          .then(response => response.json())
-          .then(result => {
-            this.users = result
-          })
-      })
-    },
-    transformClick: function(id){
-      this.id = id
-    }
-  },
   el: '#app',
   render: h => h(App),
   router: router,

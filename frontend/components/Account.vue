@@ -6,7 +6,7 @@
           <div class="column">
             <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
-            <span class="title is-4 has-text-muted">Johan</span>
+            <span class="title is-4 has-text-muted">{{users[0].username}}</span>
           </div>
         </div>
       </div>
@@ -15,15 +15,13 @@
       <div class="column">
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <span>Privatkonto</span> - 4569kr
-            <span v-if="id !== users.id" v-on:click="transformclick(users.id)">{{users.userBalance}}</span><input v-if="id === users.id" v-model="users.userBalance" type="text">
+            <span>Private account - {{users[0].userBalance}}kr</span>
             <a class="button">Deposit</a>
           </p>
-
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
-            Fondkonto - 68321kr
+            <span>Stock account - {{users[0].stockBalance}}kr</span>
             <a class="button">Deposit</a>
           </p>
         </div>
@@ -111,5 +109,45 @@
 </style>
 
 <script>
-
+  export default {
+    created() {
+      fetch('http://localhost:3000/userlist')
+        .then(response => response.json())
+        .then(result => {
+          this.users = result
+        })
+    },
+    data() {
+      return{
+        users: null,
+        id: null,
+        userBalance: null,
+        stockBalance: null
+      }
+    },
+    methods: {
+      deposit: function() {
+        fetch('http://localhost:3000/register', {
+          body: JSON.stringify({
+            userBalance: this.userBalance,
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        }).then(response => {
+          return response.text()
+        }).then(() => {
+          fetch('http://localhost:3000/users')
+            .then(response => response.json())
+            .then(result => {
+              this.users = result
+            })
+        })
+      },
+      transformClick: function(id){
+        this.id = id
+      }
+    },
+  }
 </script>

@@ -68,7 +68,7 @@ app.post('/register', function(request, response) {
   let id = uuidv4()
   let salt = "testsalt"
   let password = hashPassword(inputPassword, salt)
-  db.run('INSERT INTO users VALUES (?, ?, ?)', [id, username, password])
+  db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
       response.send('You are now registered as ' + request.body.username + '.')
     })
@@ -97,9 +97,9 @@ app.listen(3000, function() {
 
 /////////////////////// Team Lidl /////////////////
 
-// list the 
-app.get('/users', function(request, response) {
-  db.all('SELECT * FROM users WHERE ').then(users => {
-    response.send(users)
-  })
-})
+// list the user information
+// app.get('/users', function(request, response) {
+//   db.all('SELECT * FROM users').then(users => {
+//     response.send(users)
+//   })
+// })
