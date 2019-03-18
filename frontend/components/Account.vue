@@ -16,7 +16,7 @@
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Privatkonto</span> - 4569kr
-            <span v-if="id !== users.id" v-on:click="transformclick(users.id)">{{users.userBalance}}</span><input v-if="id === users.id" v-model="users.userBalance" type="text">
+            <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
 
@@ -24,6 +24,7 @@
         <div class="panel">
           <p class="panel-heading is-size-4">
             Fondkonto - 68321kr
+            <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
         </div>
@@ -105,9 +106,15 @@
   padding-bottom: 10px;
 }
 
+.input {
+  width: 180px;
+  float: right;
+}
+
 .button {
   float: right;
 }
+
 </style>
 
 <script>
