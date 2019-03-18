@@ -6,7 +6,7 @@
           <div class="column">
             <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
-            <span class="title is-4 has-text-muted">André</span>
+            <span class="title is-4 has-text-muted">Johan</span>
           </div>
         </div>
       </div>
@@ -16,11 +16,15 @@
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Privatkonto</span> - 4569kr
+            <span v-if="id !== users.id" v-on:click="transformclick(users.id)">{{users.userBalance}}</span><input v-if="id === users.id" v-model="users.userBalance" type="text">
+            <a class="button">Deposit</a>
           </p>
+
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
             Fondkonto - 68321kr
+            <a class="button">Deposit</a>
           </p>
         </div>
       </div>
@@ -96,8 +100,13 @@
 .panel-heading{
   background-color: white;
 }
+
 #securehero {
   padding-bottom: 10px;
+}
+
+.button {
+  float: right;
 }
 </style>
 
