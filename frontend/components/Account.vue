@@ -16,12 +16,14 @@
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Private account - {{users[0].userBalance}}kr</span>
+            <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Stock account - {{users[0].stockBalance}}kr</span>
+            <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
         </div>
@@ -103,9 +105,15 @@
   padding-bottom: 10px;
 }
 
+.input {
+  width: 180px;
+  float: right;
+}
+
 .button {
   float: right;
 }
+
 </style>
 
 <script>
