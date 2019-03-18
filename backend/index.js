@@ -94,3 +94,12 @@ app.listen(3000, function() {
 //     response.send('Changed')
 //   })
 // })
+
+/////////////////////// Team Lidl /////////////////
+
+// list the 
+app.get('/users', function(request, response) {
+  db.all('SELECT * FROM users WHERE ').then(users => {
+    response.send(users)
+  })
+})
