@@ -6,21 +6,49 @@
           <div class="column">
             <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
-            <span class="title is-4 has-text-muted">André</span>
+            <!-- <span class="title is-4 has-text-muted">{{users[0].username}}</span> -->
           </div>
         </div>
       </div>
     </div>
+
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-brand">
+          <span class="navbar-burger burger" data-target="navbarMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </div>
+        <div id="navbarMenu" class="navbar-menu">
+          <div class="navbar-start">
+            <div class="tabs is-right">
+              <ul>
+                <li>
+                  <router-link to="/stocks">Stocks and Bonds</router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <div class="columns">
       <div class="column">
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <span>Privatkonto</span> - 4569kr
+            <!-- <span>Private account - {{users[0].userBalance}}kr</span> -->
+            <input class="input" type="text" placeholder="Deposit amount">
+            <a class="button">Deposit</a>
           </p>
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
-            Fondkonto - 68321kr
+            <!-- <span>Stock account - {{users[0].stockBalance}}kr</span> -->
+            <input class="input" type="text" placeholder="Deposit amount">
+            <a class="button">Deposit</a>
           </p>
         </div>
       </div>
@@ -96,11 +124,62 @@
 .panel-heading{
   background-color: white;
 }
+
 #securehero {
   padding-bottom: 10px;
 }
+
+.input {
+  width: 180px;
+  float: right;
+}
+
+.button {
+  float: right;
+}
+
 </style>
 
 <script>
-
+  export default {
+    created() {
+      fetch('http://localhost:3000/userlist')
+        .then(response => response.json())
+        .then(result => {
+          this.users = result
+        })
+    },
+    data() {
+      return{
+        users: null,
+        id: null,
+        userBalance: null,
+        stockBalance: null
+      }
+    },
+    methods: {
+      deposit: function() {
+        fetch('http://localhost:3000/register', {
+          body: JSON.stringify({
+            userBalance: this.userBalance,
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        }).then(response => {
+          return response.text()
+        }).then(() => {
+          fetch('http://localhost:3000/users')
+            .then(response => response.json())
+            .then(result => {
+              this.users = result
+            })
+        })
+      },
+      transformClick: function(id){
+        this.id = id
+      }
+    },
+  }
 </script>
