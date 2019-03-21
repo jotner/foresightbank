@@ -62,12 +62,14 @@ app.post('/login', function(request, response) {
     if (rows.length == 0) {
       response.send('Wrong username or password.')
     } else {
-      let tokenUser = request.body.username
-      let randomToken = uuidv4()
-      response.set('Set-Cookie', 'token=' + randomToken + '')
-      response.send('Welcome, ' + request.body.username + '!')
-      db.run('INSERT INTO tokens VALUES (?, ?)', [tokenUser, randomToken]).then(() => {
-        console.log(tokenUser)
+      db.all('SELECT id FROM users WHERE username = ?;', [request.body.username]).then(id => {
+        let tokenUser = id[0].id
+        let randomToken = uuidv4()
+        response.set('Set-Cookie', 'token=' + randomToken + '')
+        response.send('Welcome, ' + request.body.username + '!')
+        db.run('INSERT INTO tokens VALUES (?, ?)', [tokenUser, randomToken]).then(() => {
+          console.log(tokenUser)
+        })
       })
     }
   })
@@ -82,7 +84,10 @@ app.post('/register', function(request, response) {
   let password = hashPassword(inputPassword, salt)
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
-      response.send('You are now registered as ' + request.body.username + '.')
+      db.run('INSERT INTO accounts(id, userbalance, stockbalance) VALUES(?, 0, 0)', [id])
+        .then(() => {
+          response.send('You are now registered as ' + request.body.username + '.')
+        })
     })
 })
 
@@ -108,9 +113,3 @@ app.listen(3000, function() {
 // })
 
 /////////////////////// Team Lidl /////////////////
-
-// app.get('/users', function(request, response) {
-//   db.all('SELECT * FROM users').then(users => {
-//     response.send(users)
-//   })
-// })
