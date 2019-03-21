@@ -117,19 +117,3 @@ app.listen(3000, function() {
 //     response.send('Changed')
 //   })
 // })
-
-<<
-<< << < HEAD: backend / index.js
-  /////////////////////// Team Lidl /////////////////
-
-  // list the user information
-  // app.get('/users', function(request, response) {
-  //   db.all('SELECT * FROM users').then(users => {
-  //     response.send(users)
-  //   })
-  // })
-  ===
-  === =
-  /////////////////////// Team Lidl /////////////////
-  >>>
-  >>> > ccc20535c0a4ce06644ad77545e792b4ca68fd80: backend / database.js
