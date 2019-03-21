@@ -31,12 +31,24 @@ app.get('/userlist', function(request, response) {
   })
 })
 
+app.get('/account', function(request, response) {
 
-// app.get('/account', function(request, response) {
-//   db.all('SELECT * FROM tokens WHERE userName = ? AND token = ?', []).then(rows => {
-//
-//   })
-// })
+  if (request.get('Cookie') === undefined) {
+    response.send('Invalid session or cookie not confirmed')
+  }
+  let activeToken = request.get('Cookie')
+  let strippedtoken = activeToken.split('token=')
+  let finToken = strippedtoken[1]
+  db.all('SELECT userName FROM tokens WHERE token = ?',
+    finToken).then(rows => {
+    if (rows.length === 0) {
+      response.send('Cookie exists however does not match any in our database')
+    } else {
+      response.send('You are logged in' + rows)
+    }
+
+  })
+})
 
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
@@ -97,7 +109,6 @@ app.listen(3000, function() {
 
 /////////////////////// Team Lidl /////////////////
 
-// list the user information
 // app.get('/users', function(request, response) {
 //   db.all('SELECT * FROM users').then(users => {
 //     response.send(users)
