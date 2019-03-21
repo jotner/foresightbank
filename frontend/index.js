@@ -5,6 +5,7 @@ import LogIn from './components/LogIn.vue'
 import Register from './components/Register.vue'
 import Account from './components/Account.vue'
 import About from './components/About.vue'
+import Contact from './components/Contact.vue'
 import Stocks from './components/Stocks.vue'
 import VueRouter from 'vue-router'
 
@@ -30,6 +31,10 @@ const router = new VueRouter({
     {
       component: About,
       path: '/about'
+    },
+    {
+      component: Contact,
+      path: '/contact'
     },
     {
       component: Stocks,

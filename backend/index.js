@@ -48,6 +48,7 @@ app.post('/login', function(request, response) {
     console.log(rows)
 
     if (rows.length == 0) {
+      response.status(401)
       response.send('Wrong username or password.')
     } else {
       let tokenUser = request.body.username
@@ -71,6 +72,11 @@ app.post('/register', function(request, response) {
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
       response.send('You are now registered as ' + request.body.username + '.')
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(409)
+      response.send('User already exists.')
     })
 })
 

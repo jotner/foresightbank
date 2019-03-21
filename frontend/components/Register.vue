@@ -45,6 +45,7 @@
                 </label>
               </div>
             </div>
+            <p v-if="userExists" class="help is-danger user-exist">The username is already in use!</p>
             <div class="field is-grouped">
               <div class="control">
                 <input v-on:click="register" class="button" value="Submit" type="button">
@@ -95,6 +96,10 @@
   color: red;
 }
 
+.user-exist {
+  font-size: 20px;
+}
+
 .button.is-text {
   color: #4a4a4a;
   text-decoration: none;
@@ -125,25 +130,33 @@ export default {
       checked: false,
       missingUsername: false,
       missingPassword: false,
-      missingCheckbox: false
+      missingCheckbox: false,
+      userExists: false
     }
   },
   methods: {
     register() {
       // Check if username, password and terms are empty
-      if (this.username === null && this.password === null) {
+      this.missingCheckbox = false
+      this.userExists = false
+      if (!this.username && !this.password) {
         this.missingUsername = true
         this.missingPassword = true
-      } else if (this.username === null) {
+      } else if (!this.username) {
         this.missingUsername = true
-      } else if (this.password === null) {
+        this.missingPassword = false
+      } else if (!this.password) {
         this.missingPassword = true
+        this.missingUsername = false
+      } else {
+        this.missingUsername = false
+        this.missingPassword = false
       }
       if (!this.checked) {
         this.missingCheckbox = true
       }
       // Continue to register if all inputs are not empty
-      if (this.username !== null && this.password !== null && this.checked) {
+      if (this.username && this.password && this.checked) {
         let info = {
           username: this.username,
           password: this.password
@@ -155,10 +168,13 @@ export default {
             },
             method: 'POST'
           })
-          .then(response => response.text())
-          .then(result => {
-            this.showWelcome = true
-            this.hideForm = false
+          .then(response => {
+            if (response.status === 200) {
+              this.showWelcome = true
+              this.hideForm = false
+            } else {
+              this.userExists = true
+            }
           })
       }
     }

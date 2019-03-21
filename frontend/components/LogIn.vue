@@ -30,8 +30,9 @@
                   </span>
                 </div>
               </div>
-              <button v-on:click="login" class="button is-block loginblock is-large is-fullwidth">Login</button><br>
-              <router-link to="/register"><button class="button is-block loginblock">Sign Up</button></router-link>
+              <p v-if="error" class="help is-danger error">Incorrect username or password!</p>
+              <button v-on:click="login" class="button is-block loginblock is-large is-fullwidth">Log in</button><br>
+              <router-link to="/register"><button class="button is-block loginblock">Sign up</button></router-link>
             </form>
           </div>
           <p class="has-text loginoptions">
@@ -49,6 +50,10 @@
 .button {
   color: white;
 }
+
+.error {
+  font-size: 20px;
+}
 </style>
 
 <script>
@@ -58,20 +63,28 @@ export default {
       username: null,
       password: null,
       missingUsername: null,
-      missingPassword: null
+      missingPassword: null,
+      error: false
     }
   },
   methods: {
     login() {
-      if (this.username === null && this.password === null) {
+      this.error = false
+      if (!this.username && !this.password) {
         this.missingUsername = true
         this.missingPassword = true
-      } else if (this.username === null) {
+      } else if (!this.username) {
         this.missingUsername = true
-      } else if (this.password === null) {
+        this.missingPassword = false
+      } else if (!this.password) {
         this.missingPassword = true
+        this.missingUsername = false
+      } else {
+        this.missingUsername = false
+        this.missingPassword = false
       }
-      if (this.username !== null && this.password !== null) {
+      if (this.username && this.password) {
+
         let info = {
           username: this.username,
           password: this.password
@@ -83,9 +96,14 @@ export default {
             },
             method: 'POST'
           })
-          .then(response => response.text())
-          .then(result => {
-
+          .then(response => {
+            if (response.ok) {
+              this.$router.push({
+                path: '/account'
+              })
+            } else {
+              this.error = true
+            }
           })
       }
     }
