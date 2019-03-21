@@ -4,6 +4,8 @@
       <h3 class="title is-2">About Us</h3>
       <h4 class="subtitle is-5">Our mission is to create
         engaged, lifelong relationships.</h4>
+        <section class="hero is-white">
+           <div class="hero-body">
         <p><strong>We serve nearly half of scandinavia's households with a broad range of financial services, including personal banking,
           credit cards, mortgages, auto financing, investment advice, small business loans and payment processing.
         </strong></p>
@@ -13,6 +15,8 @@
           serving corporations, governments, institutions and individuals around the world. The company serves clients through operations
            in 5 countries.
          </p>
+       </div>
+       </section>
     </div>
 
     <div class="columns has-same-height is-gapless">

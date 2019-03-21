@@ -6,7 +6,7 @@
           <div class="column">
             <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
-            <!-- <span class="title is-4 has-text-muted">{{users[0].username}}</span> -->
+            <span class="title is-4 has-text-muted">{{users[0].username}}</span>
           </div>
         </div>
       </div>
@@ -39,14 +39,14 @@
       <div class="column">
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <!-- <span>Private account - {{users[0].userBalance}}kr</span> -->
+            <span>Private account - {{users[0].userBalance}}kr</span>
             <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <!-- <span>Stock account - {{users[0].stockBalance}}kr</span> -->
+            <span>Stock account - {{users[0].stockBalance}}kr</span>
             <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
