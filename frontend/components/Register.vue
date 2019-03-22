@@ -161,8 +161,9 @@ export default {
           username: this.username,
           password: this.password
         }
-        fetch('http://localhost:3000/register/', {
+        fetch('/api/register/', {
             body: JSON.stringify(info),
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },

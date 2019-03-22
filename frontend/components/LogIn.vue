@@ -89,7 +89,7 @@ export default {
           username: this.username,
           password: this.password
         }
-        fetch('http://localhost:3000/login/', {
+        fetch('/api/login/', {
             body: JSON.stringify(info),
             headers: {
               'Content-Type': 'application/json'

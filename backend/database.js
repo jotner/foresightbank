@@ -5,10 +5,18 @@ const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
 const uuidv4 = require('uuid/v4')
-let cors = require('cors')
+// let cors = require('cors')
+// app.use((request, response, next) => {
+//   response.header('Access-Control-Allow-Credentials', 'true')
+//   response.header('Access-Control-Allow-Origin', 'http://localhost:8080')
+//   response.header('Access-Control-Allow-Headers', 'Content-Type, Cookie')
+//   next()
+// })
 app.use(bodyParser.json())
-app.use(cors())
+// app.use(cors())
 app.use(express.static(path.join(path.resolve(), 'public')))
+
+// app.set('etag', false)
 
 let db
 
@@ -39,7 +47,8 @@ app.get('/account', function(request, response) {
   let activeToken = request.get('Cookie')
   let strippedtoken = activeToken.split('token=')
   let finToken = strippedtoken[1]
-  db.all('SELECT userName FROM tokens WHERE token = ?',
+  console.log(finToken)
+  db.all('SELECT userId FROM tokens WHERE token = ?',
     finToken).then(rows => {
     if (rows.length === 0) {
       response.send('Cookie exists however does not match any in our database')
@@ -66,7 +75,7 @@ app.post('/login', function(request, response) {
       db.all('SELECT id FROM users WHERE username = ?;', [request.body.username]).then(id => {
         let tokenUser = id[0].id
         let randomToken = uuidv4()
-        response.set('Set-Cookie', 'token=' + randomToken + '')
+        response.set('Set-Cookie', 'token=' + randomToken + '; Path=/')
         response.send('Welcome, ' + request.body.username + '!')
         db.run('INSERT INTO tokens VALUES (?, ?)', [tokenUser, randomToken]).then(() => {
           console.log(tokenUser)

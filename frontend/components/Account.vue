@@ -6,7 +6,7 @@
           <div class="column">
             <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
-            <span class="title is-4 has-text-muted">{{users[0].username}}</span>
+            <span class="title is-4 has-text-muted">{{username}}</span>
           </div>
         </div>
       </div>
@@ -39,14 +39,14 @@
       <div class="column">
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <span>Private account - {{users[0].userBalance}}kr</span>
+            <!-- <span>Private account - {{users[0].userBalance}}kr</span> -->
             <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <span>Stock account - {{users[0].stockBalance}}kr</span>
+            <!-- <span>Stock account - {{users[0].stockBalance}}kr</span> -->
             <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
@@ -143,43 +143,19 @@
 <script>
   export default {
     created() {
-      fetch('http://localhost:3000/userlist')
-        .then(response => response.json())
+      console.log('hej')
+      fetch('/api/account')
         .then(result => {
-          this.users = result
+          this.username = result
         })
     },
     data() {
       return{
         users: null,
-        id: null,
+        username: null,
         userBalance: null,
         stockBalance: null
       }
-    },
-    methods: {
-      deposit: function() {
-        fetch('http://localhost:3000/register', {
-          body: JSON.stringify({
-            userBalance: this.userBalance,
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          method: 'POST'
-        }).then(response => {
-          return response.text()
-        }).then(() => {
-          fetch('http://localhost:3000/users')
-            .then(response => response.json())
-            .then(result => {
-              this.users = result
-            })
-        })
-      },
-      transformClick: function(id){
-        this.id = id
-      }
-    },
+    }
   }
 </script>
