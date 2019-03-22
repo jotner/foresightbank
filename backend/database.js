@@ -40,22 +40,31 @@ app.get('/userlist', function(request, response) {
 })
 
 app.get('/account', function(request, response) {
-
   if (request.get('Cookie') === undefined) {
     response.send('Invalid session or cookie not confirmed')
   }
   let activeToken = request.get('Cookie')
   let strippedtoken = activeToken.split('token=')
   let finToken = strippedtoken[1]
-  console.log(finToken)
+  // Get the userId from the active user
   db.all('SELECT userId FROM tokens WHERE token = ?',
     finToken).then(rows => {
     if (rows.length === 0) {
       response.send('Cookie exists however does not match any in our database')
     } else {
-      response.send('You are logged in' + rows)
+      // get accountInfo
+      db.all('SELECT * FROM accounts WHERE userId = ?', [rows[0].userId]).then(accountInfo => {
+        // get username
+        db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
+          // merges the username in the same object as accountInfo
+          accountInfo[0].username = user[0].username
+          
+          console.log(accountInfo[0])
+          // sends accountInfo 
+          response.send('You are logged in' + accountInfo[0])
+        })
+      })
     }
-
   })
 })
 

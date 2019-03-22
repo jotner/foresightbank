@@ -108,16 +108,15 @@
       </div>
     </div>
     <div id="securehero" class="hero is-small">
-    <div class="hero-body secbg">
-      <div class="container has-text-centered">
-        <h1 class="title-index">
-          Your account is safe with Foresight Secure
-        </h1>
+      <div class="hero-body secbg">
+        <div class="container has-text-centered">
+          <h1 class="title-index">
+            Your account is safe with Foresight Secure
+          </h1>
+        </div>
       </div>
     </div>
   </div>
-  </div>
-
 </template>
 
 <style scoped>
@@ -143,10 +142,13 @@
 <script>
   export default {
     created() {
-      console.log('hej')
-      fetch('/api/account')
+      fetch('/api/account').then(response => {
+        console.log(response)
+        return response.json() // Har provat både med och utan denna del, inget fungerar :(
+      })
         .then(result => {
           this.username = result
+          console.log(this.username) 
         })
     },
     data() {
