@@ -26,10 +26,10 @@ sqlite.open('./database.sqlite').then(database_ => {
 
 // Function for crypting passwords.
 function hashPassword(password, salt) {
-  var hash = crypto.createHash('sha256');
-  hash.update(password);
-  hash.update(salt);
-  return hash.digest('hex');
+  var hash = crypto.createHash('sha256')
+  hash.update(password)
+  hash.update(salt)
+  return hash.digest('hex')
 }
 
 // Fetch all users in a list.
@@ -58,10 +58,8 @@ app.get('/account', function(request, response) {
         db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
           // merges the username in the same object as accountInfo
           accountInfo[0].username = user[0].username
-          
-          console.log(accountInfo[0])
           // sends accountInfo 
-          response.send('You are logged in' + accountInfo[0])
+          response.send(accountInfo[0])
         })
       })
     }
@@ -75,7 +73,6 @@ app.post('/login', function(request, response) {
 
   db.all('SELECT * FROM users WHERE username = ? AND password = ?;',
     [request.body.username, password]).then(rows => {
-    console.log(rows)
 
     if (rows.length == 0) {
       response.status(401)
@@ -87,7 +84,6 @@ app.post('/login', function(request, response) {
         response.set('Set-Cookie', 'token=' + randomToken + '; Path=/')
         response.send('Welcome, ' + request.body.username + '!')
         db.run('INSERT INTO tokens VALUES (?, ?)', [tokenUser, randomToken]).then(() => {
-          console.log(tokenUser)
         })
       })
     }
@@ -103,7 +99,7 @@ app.post('/register', function(request, response) {
   let password = hashPassword(inputPassword, salt)
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
-      db.run('INSERT INTO accounts(id, userbalance, stockbalance) VALUES(?, 0, 0)', [id])
+      db.run('INSERT INTO accounts(userId, userbalance, stockbalance) VALUES(?, 0, 0)', [id])
         .then(() => {
           response.send('You are now registered as ' + request.body.username + '.')
         })
@@ -116,8 +112,8 @@ app.post('/register', function(request, response) {
 })
 
 app.listen(3000, function() {
-  console.log('The service is running!');
-});
+  console.log('The service is running!')
+})
 
 // SPRINT 2 DO NOT TOUCH
 //

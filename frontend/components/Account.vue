@@ -6,7 +6,7 @@
           <div class="column">
             <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
-            <span class="title is-4 has-text-muted">{{username}}</span>
+            <span class="title is-4 has-text-muted username">{{ user.username }}</span>
           </div>
         </div>
       </div>
@@ -39,14 +39,14 @@
       <div class="column">
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <!-- <span>Private account - {{users[0].userBalance}}kr</span> -->
+            <span>Private account - {{ user.userBalance }}kr</span>
             <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
         </div>
         <div class="panel">
           <p class="panel-heading is-size-4">
-            <!-- <span>Stock account - {{users[0].stockBalance}}kr</span> -->
+            <span>Stock account - {{ user.stockBalance }}kr</span>
             <input class="input" type="text" placeholder="Deposit amount">
             <a class="button">Deposit</a>
           </p>
@@ -136,24 +136,24 @@
 .button {
   float: right;
 }
+/* Makes the first letter of the username capitalized */
+.username {
+  text-transform: capitalize;
+}
 
 </style>
 
 <script>
   export default {
     created() {
-      fetch('/api/account').then(response => {
-        console.log(response)
-        return response.json() // Har provat både med och utan denna del, inget fungerar :(
-      })
+      fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
         .then(result => {
-          this.username = result
-          console.log(this.username) 
+          this.user = result
         })
     },
     data() {
       return{
-        users: null,
+        user: null,
         username: null,
         userBalance: null,
         stockBalance: null
