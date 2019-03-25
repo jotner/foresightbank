@@ -40,39 +40,50 @@
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Private account - {{ user.userBalance }}kr</span>
-            <nav class="navbar">
-              <div class="navbar-menu">
-                <div class="navbar">
-                  <b-dropdown position="is-bottom-right" aria-role="menu">
-                    <a
-                    class="navbar-item"
-                    slot="trigger"
-                    role="button">
-                    <span>Transactions<i class="fa fa-caret-down"></i></span>
+
+              <b-dropdown position="is-bottom-right" aria-role="menu">
+                <a class="navbar-item" slot="trigger" role="button">
+                  <span>Transactions<i class="fa fa-caret-down"></i></span>
                     <b-icon icon="menu-down"></b-icon>
                   </a>
-                <b-dropdown-item aria-role="menu-item" custom paddingless>
-                    <form action="">
-                        <div class="modal-card" style="width:220px;">
-                            <section class="modal-card-body">
+                   <b-dropdown-item aria-role="menu-item" custom paddingless>
+                      <form action="">
+                        <div class="modal-card">
+                          <section class="modal-card-body">
                               <input v-model="deposit" class="input" type="text" placeholder="Deposit amount">
-                              <a v-on:click="depositcalc" class="button">Deposit</a>
+                               <a v-on:click="depositcalc" class="button">Deposit</a>
+                              <hr class="dropdown-divider">
                             </section>
-                        </div>
-                    </form>
-                </b-dropdown-item>
-              </b-dropdown>
-            </div>
-          </div>
-        </nav>
-      </p>
-    </div>
+                         </div>
+                       </form>
+                     </b-dropdown-item>
+                 </b-dropdown>
+
+       </p>
+     </div>
 
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Stock account - {{ user.stockBalance }}kr</span>
-            <input class="input" type="text" placeholder="Deposit amount">
-            <a class="button">Deposit</a>
+
+            <b-dropdown position="is-bottom-right" aria-role="menu">
+              <a class="navbar-item" slot="trigger" role="button">
+                <span>Transactions<i class="fa fa-caret-down"></i></span>
+                  <b-icon icon="menu-down"></b-icon>
+                </a>
+                 <b-dropdown-item aria-role="menu-item" custom paddingless>
+                    <form action="">
+                      <div class="modal-card">
+                        <section class="modal-card-body">
+                            <input v-model="deposit" class="input" type="text" placeholder="Deposit amount">
+                             <a v-on:click="depositcalc" class="button">Deposit</a>
+                            <hr class="dropdown-divider">
+                          </section>
+                       </div>
+                     </form>
+                   </b-dropdown-item>
+               </b-dropdown>
+               
           </p>
         </div>
       </div>
@@ -157,12 +168,27 @@
   float: right;
 }
 
-.button {
-  /* float: right; */
+.modal-card {
+  width: 302px;
 }
 /* Makes the first letter of the username capitalized */
 .username {
   text-transform: capitalize;
+}
+
+.navbar-item > span {
+  font-size: 20px;
+}
+
+b-dropdown {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
+.dropdown {
+  vertical-align: baseline;
 }
 
 </style>
@@ -192,7 +218,6 @@
           })
           let transactionInfo = {amount:0}
           transactionInfo.amount += Number (this.user.userBalance) + Number (this.deposit)
-          console.log(transactionInfo);
           fetch('/api/deposit/', {
               body: JSON.stringify(transactionInfo),
               headers: {
