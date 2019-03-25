@@ -40,10 +40,34 @@
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Private account - {{ user.userBalance }}kr</span>
-            <input class="input" type="text" placeholder="Deposit amount">
-            <a class="button">Deposit</a>
-          </p>
-        </div>
+            <nav class="navbar">
+              <div class="navbar-menu">
+                <div class="navbar">
+                  <b-dropdown position="is-bottom-right" aria-role="menu">
+                    <a
+                    class="navbar-item"
+                    slot="trigger"
+                    role="button">
+                    <span>Transactions<i class="fa fa-caret-down"></i></span>
+                    <b-icon icon="menu-down"></b-icon>
+                  </a>
+                <b-dropdown-item aria-role="menu-item" custom paddingless>
+                    <form action="">
+                        <div class="modal-card" style="width:220px;">
+                            <section class="modal-card-body">
+                              <input v-model="deposit" class="input" type="text" placeholder="Deposit amount">
+                              <a v-on:click="depositcalc" class="button">Deposit</a>
+                            </section>
+                        </div>
+                    </form>
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
+          </div>
+        </nav>
+      </p>
+    </div>
+
         <div class="panel">
           <p class="panel-heading is-size-4">
             <span>Stock account - {{ user.stockBalance }}kr</span>
@@ -134,7 +158,7 @@
 }
 
 .button {
-  float: right;
+  /* float: right; */
 }
 /* Makes the first letter of the username capitalized */
 .username {
@@ -156,7 +180,26 @@
         user: null,
         username: null,
         userBalance: null,
-        stockBalance: null
+        stockBalance: null,
+        deposit: null
+      }
+    },
+    methods: {
+      depositcalc() {
+        fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+          .then(result => {
+            this.user = result
+          })
+          let transactionInfo = {amount:0}
+          transactionInfo.amount += Number (this.user.userBalance) + Number (this.deposit)
+          console.log(transactionInfo);
+          fetch('/api/deposit/', {
+              body: JSON.stringify(transactionInfo),
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: 'POST'
+            })
       }
     }
   }
