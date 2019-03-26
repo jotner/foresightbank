@@ -67,7 +67,6 @@ app.get('/account', function(request, response) {
 })
 
 app.post('/transactions', function(request, response) {
-
   let activeToken = request.get('Cookie')
   let strippedtoken = activeToken.split('token=')
   let finToken = strippedtoken[1]
@@ -97,9 +96,12 @@ app.post('/transactions', function(request, response) {
       })
     }
   })
-
-
 })
+
+app.post('/management', function(request, response) {
+
+}
+
 
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
