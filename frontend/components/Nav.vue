@@ -63,7 +63,6 @@ export default {
   created() {
     eventBus.$on('show-online', (showOnline) => {
       this.userOnline = showOnline
-      console.log(showOnline, '!!!!!!!!!!!!!');
     })
     fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
       .then(result => {
