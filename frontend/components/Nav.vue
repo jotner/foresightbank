@@ -80,13 +80,10 @@ export default {
   methods: {
     logout() {
       fetch('/api/logout/', {
-          // body: JSON.stringify(info),
-          // headers: {
-          //   'Content-Type': 'application/json'
-          // },
           method: 'DELETE'
         })
         .then((response) => {
+          // Redirect to index when logged out
           this.$router.push({
             path: '/'
           })

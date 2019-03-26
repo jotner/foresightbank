@@ -122,6 +122,13 @@ app.post('/login', function(request, response) {
 })
 
 app.delete('/logout', function(request, response) {
+  let activeToken = request.get('Cookie')
+  let strippedtoken = activeToken.split('token=')
+  let finToken = strippedtoken[1]
+  db.run('DELETE FROM tokens WHERE token = ?',
+    finToken).then(() => {
+    response.send('Logged out!')
+  })
   response.clearCookie("token");
   response.redirect('/')
 })
@@ -150,14 +157,6 @@ app.post('/register', function(request, response) {
 app.listen(3000, function() {
   console.log('The service is running!')
 })
-
-// SPRINT 2 DO NOT TOUCH
-//
-// app.delete('/logout', function(request, response) {
-//   db.run('DELETE FROM tokens WHERE userName;').then(() => {
-//     response.send('Logged out!')
-//   })
-// })
 
 // app.put('/change', function(request, response) {
 //   let alias = request.params.alias
