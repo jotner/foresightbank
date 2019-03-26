@@ -76,7 +76,7 @@ app.post('/transactions', function(request, response) {
     if (rows.length === 0) {
       response.send('Cookie exists however does not match any in our database')
     } else {
-      
+
       // get accountInfo
       db.all('SELECT * FROM accounts WHERE userId = ?', [rows[0].userId]).then(accountInfo => {
         // get username
@@ -87,8 +87,8 @@ app.post('/transactions', function(request, response) {
             let transactionInfo = request.body
             console.log(accountInfo[0].userBalance)
             console.log(transactionInfo)
-            db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance+transactionInfo.amount, rows[0].userId])
-            db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance-transactionInfo.amount, rows[0].userId])
+            db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance + transactionInfo.amount, rows[0].userId])
+            db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance - transactionInfo.amount, rows[0].userId])
           }
           // sends accountInfo
           response.send(accountInfo[0])
@@ -98,9 +98,6 @@ app.post('/transactions', function(request, response) {
   })
 })
 
-app.post('/management', function(request, response) {
-
-}
 
 
 app.post('/login', function(request, response) {
