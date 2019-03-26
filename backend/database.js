@@ -58,7 +58,7 @@ app.get('/account', function(request, response) {
         db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
           // merges the username in the same object as accountInfo
           accountInfo[0].username = user[0].username
-          // sends accountInfo 
+          // sends accountInfo
           response.send(accountInfo[0])
         })
       })
@@ -83,11 +83,15 @@ app.post('/login', function(request, response) {
         let randomToken = uuidv4()
         response.set('Set-Cookie', 'token=' + randomToken + '; Path=/')
         response.send('Welcome, ' + request.body.username + '!')
-        db.run('INSERT INTO tokens VALUES (?, ?)', [tokenUser, randomToken]).then(() => {
-        })
+        db.run('INSERT INTO tokens VALUES (?, ?)', [tokenUser, randomToken]).then(() => {})
       })
     }
   })
+})
+
+app.delete('/logout', function(request, response) {
+  response.clearCookie("token");
+  response.redirect('/')
 })
 
 // Register function. Generates a cryptic version of your desired password.

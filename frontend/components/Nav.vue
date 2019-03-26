@@ -26,17 +26,29 @@
                 <li>
                   <router-link to="/contact">Contact</router-link>
                 </li>
+                <li>
+                  <router-link to="/account" v-if="userOnline">Account</router-link>
+                </li>
+                <li>
+                  <router-link to="/login" v-if="!userOnline">
+                    <a>
+                      <span class="icon">
+                        <i class="fa fa-user"></i>
+                      </span>
+                      <span>Log In</span>
+                    </a>
+                  </router-link>
+                </li>
+                <li>
+                  <a v-on:click="logout" v-if="userOnline">
+                    <span class="icon">
+                      <i class="fa fa-user"></i>
+                    </span>
+                    <span>Log Out ({{user ? user.username : ''}})</span>
+                  </a>
+                </li>
               </ul>
-              <router-link to="/login">
-                <!-- <router-link to="/account" v-if="userOnline"> -->
-                <a>
-                  <span class="icon">
-                    <i class="fa fa-user"></i>
-                  </span>
-                  <span>Log In</span>
-                  <span v-if="userOnline">{{ username }}</span>
-                </a>
-              </router-link>
+
             </div>
           </div>
         </div>
@@ -46,17 +58,41 @@
 </section>
 </template>
 <script>
+import eventBus from './eventbus.js'
 export default {
-  // created() {
-  //   if () {
-  //     this.userOnline = true
-  //     this.username = 'Test'
-  //   }
-  // },
+  created() {
+    eventBus.$on('show-online', (showOnline) => {
+      this.userOnline = showOnline
+      console.log(showOnline, '!!!!!!!!!!!!!');
+    })
+    fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+      .then(result => {
+        this.user = result
+        this.userOnline = true
+      })
+  },
   data() {
     return {
+      user: null,
       username: null,
-      userOnline: false
+      userOnline: false,
+    }
+  },
+  methods: {
+    logout() {
+      fetch('/api/logout/', {
+          // body: JSON.stringify(info),
+          // headers: {
+          //   'Content-Type': 'application/json'
+          // },
+          method: 'DELETE'
+        })
+        .then((response) => {
+          this.$router.push({
+            path: '/'
+          })
+          this.userOnline = false
+        })
     }
   }
 }

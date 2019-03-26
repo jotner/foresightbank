@@ -57,6 +57,7 @@
 </style>
 
 <script>
+import eventBus from './eventbus.js'
 export default {
   data() {
     return {
@@ -64,8 +65,12 @@ export default {
       password: null,
       missingUsername: null,
       missingPassword: null,
-      error: false
+      error: false,
+      showOnline: true
     }
+  },
+  props: {
+    online: Boolean,
   },
   methods: {
     login() {
@@ -98,6 +103,9 @@ export default {
           })
           .then(response => {
             if (response.ok) {
+              eventBus.$emit('show-online',
+                this.showOnline
+              )
               this.$router.push({
                 path: '/account'
               })
