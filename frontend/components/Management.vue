@@ -18,7 +18,7 @@
           Create new account
         </a>
         <b-field label="Name">
-         <b-input v-model="name"></b-input>
+         <b-input v-model="nameInput" placeholder="Enter the name of your new account"></b-input>
      </b-field>
       </div>
     </div>
@@ -33,6 +33,12 @@ export default {
       .then(result => {
         this.user = result
       })
+  },
+  data() {
+    return{
+      user: null,
+      nameInput: null
+    }
   },
 }
 </script>
