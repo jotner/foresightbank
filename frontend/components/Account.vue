@@ -50,8 +50,8 @@
                       <form action="">
                         <div class="modal-card">
                           <section class="modal-card-body">
-                              <input v-model="deposit" class="input" type="text" placeholder="Deposit amount">
-                               <a v-on:click="depositcalc" class="button">Deposit</a>
+                              <input v-model="amount" class="input" type="text" placeholder="Deposit amount">
+                               <a v-on:click="transaction" class="button">Deposit</a>
                               <hr class="dropdown-divider">
                             </section>
                          </div>
@@ -75,8 +75,8 @@
                     <form action="">
                       <div class="modal-card">
                         <section class="modal-card-body">
-                            <input v-model="deposit" class="input" type="text" placeholder="Deposit amount">
-                             <a v-on:click="depositcalc" class="button">Deposit</a>
+                            <input v-model="amount" class="input" type="text" placeholder="Deposit amount">
+                             <a v-on:click="transaction" class="button">Deposit</a>
                             <hr class="dropdown-divider">
                           </section>
                        </div>
@@ -204,28 +204,49 @@ b-dropdown {
     data() {
       return{
         user: null,
-        username: null,
-        userBalance: null,
-        stockBalance: null,
-        deposit: null
+        amount: null
       }
     },
     methods: {
-      depositcalc() {
-        fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-          .then(result => {
-            this.user = result
-          })
-          let transactionInfo = {amount:0}
-          transactionInfo.amount += Number (this.user.userBalance) + Number (this.deposit)
-          fetch('/api/deposit/', {
-              body: JSON.stringify(transactionInfo),
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              method: 'POST'
-            })
+      transaction() {
+        let transactionInfo = {amount: Number(this.amount)}
+
+        fetch('/api/transactions/', {
+          body: JSON.stringify(transactionInfo),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        })
       }
+
+
+
+
+      // depositcalc() {
+      //   fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+      //     .then(result => {
+      //       this.user = result
+      //     })
+      //   if (this.deposit) {
+      //     console.log(this.deposit)
+      //     console.log(this.user)
+      //     let transactionInfo = {}
+      //     transactionInfo.amount = Number (this.user.userBalance) + Number (this.deposit)
+      //     transactionInfo.withdrawAmount = this.withdrawcalc(this.user.stockBalance, this.deposit)
+      //     console.log(transactionInfo)
+      //     fetch('/api/deposit/', {
+      //       body: JSON.stringify(transactionInfo),
+      //       headers: {
+      //         'Content-Type': 'application/json'
+      //       },
+      //       method: 'POST'
+      //     })
+      //   }
+      // },
+      // withdrawcalc(stockBalance ,withdraw) {
+      //   return Number (stockBalance) - Number (withdraw)
+      // }
     }
   }
 </script>
