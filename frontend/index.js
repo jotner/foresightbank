@@ -8,8 +8,10 @@ import About from './components/About.vue'
 import Contact from './components/Contact.vue'
 import Stocks from './components/Stocks.vue'
 import VueRouter from 'vue-router'
+import Buefy from 'buefy'
 
 Vue.use(VueRouter)
+Vue.use(Buefy)
 
 const router = new VueRouter({
   routes: [{

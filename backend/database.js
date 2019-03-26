@@ -66,6 +66,38 @@ app.get('/account', function(request, response) {
   })
 })
 
+app.post('/deposit', function(request, response) {
+
+  let activeToken = request.get('Cookie')
+  let strippedtoken = activeToken.split('token=')
+  let finToken = strippedtoken[1]
+  // Get the userId from the active user
+  db.all('SELECT userId FROM tokens WHERE token = ?',
+    finToken).then(rows => {
+    if (rows.length === 0) {
+      response.send('Cookie exists however does not match any in our database')
+    } else {
+      if (request.body) {
+        let transactionInfo = request.body
+        db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [transactionInfo.amount, rows[0].userId])
+      }
+
+      // get accountInfo
+      db.all('SELECT * FROM accounts WHERE userId = ?', [rows[0].userId]).then(accountInfo => {
+        // get username
+        db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
+          // merges the username in the same object as accountInfo
+          accountInfo[0].username = user[0].username
+          // sends accountInfo
+          response.send(accountInfo[0])
+        })
+      })
+    }
+  })
+
+
+})
+
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
   let salt = "testsalt"
