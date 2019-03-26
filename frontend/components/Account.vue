@@ -27,6 +27,7 @@
               <ul>
                 <li>
                   <router-link to="/stocks">Stocks and Bonds</router-link>
+                  <router-link to="/account/management">Management</router-link>
                 </li>
               </ul>
             </div>
@@ -83,7 +84,7 @@
                      </form>
                    </b-dropdown-item>
                </b-dropdown>
-               
+
           </p>
         </div>
       </div>
@@ -180,6 +181,10 @@
   font-size: 20px;
 }
 
+.navbar {
+  margin-bottom: 15px;
+}
+
 b-dropdown {
   margin: auto;
   width: 50%;
@@ -189,6 +194,10 @@ b-dropdown {
 
 .dropdown {
   vertical-align: baseline;
+}
+
+.tabs a {
+  display: inline-block;
 }
 
 </style>
@@ -219,34 +228,6 @@ b-dropdown {
           method: 'POST'
         })
       }
-
-
-
-
-      // depositcalc() {
-      //   fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-      //     .then(result => {
-      //       this.user = result
-      //     })
-      //   if (this.deposit) {
-      //     console.log(this.deposit)
-      //     console.log(this.user)
-      //     let transactionInfo = {}
-      //     transactionInfo.amount = Number (this.user.userBalance) + Number (this.deposit)
-      //     transactionInfo.withdrawAmount = this.withdrawcalc(this.user.stockBalance, this.deposit)
-      //     console.log(transactionInfo)
-      //     fetch('/api/deposit/', {
-      //       body: JSON.stringify(transactionInfo),
-      //       headers: {
-      //         'Content-Type': 'application/json'
-      //       },
-      //       method: 'POST'
-      //     })
-      //   }
-      // },
-      // withdrawcalc(stockBalance ,withdraw) {
-      //   return Number (stockBalance) - Number (withdraw)
-      // }
     }
   }
 </script>
