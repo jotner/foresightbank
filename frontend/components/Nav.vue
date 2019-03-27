@@ -61,12 +61,14 @@
 import eventBus from './eventbus.js'
 export default {
   created() {
-    eventBus.$on('show-online', (showOnline) => {
-      this.userOnline = showOnline
+    eventBus.$on('show-online', (payload) => {
+      this.userOnline = payload.online
+      this.username = payload.user
     })
     fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
       .then(result => {
         this.user = result
+        this.username = result.username
         this.userOnline = true
       })
   },

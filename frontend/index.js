@@ -6,7 +6,9 @@ import Register from './components/Register.vue'
 import Account from './components/Account.vue'
 import About from './components/About.vue'
 import Contact from './components/Contact.vue'
+import Payments from './components/Payments.vue'
 import Stocks from './components/Stocks.vue'
+import Settings from './components/Settings.vue'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 
@@ -39,8 +41,16 @@ const router = new VueRouter({
       path: '/contact'
     },
     {
+      component: Payments,
+      path: '/account/payments'
+    },
+    {
       component: Stocks,
-      path: '/stocks'
+      path: '/account/stocks'
+    },
+    {
+      component: Settings,
+      path: '/account/settings'
     }
   ]
 })

@@ -103,12 +103,14 @@ export default {
           })
           .then(response => {
             if (response.ok) {
-              eventBus.$emit('show-online',
-                this.showOnline
-              )
+              eventBus.$emit('show-online', {
+                online: this.showOnline,
+                user: this.username
+              })
               this.$router.push({
                 path: '/account'
               })
+
             } else {
               this.error = true
             }

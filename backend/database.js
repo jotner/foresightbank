@@ -133,6 +133,38 @@ app.delete('/logout', function(request, response) {
   response.redirect('/')
 })
 
+// Delete user
+app.delete('/delete/:alias', function(request, response) {
+  let currentUsername = request.params.alias
+  db.all('SELECT id FROM users WHERE username = ?', [currentUsername]).then((userId) => {
+    db.run('DELETE FROM accounts WHERE userId = ?', userId[0].id)
+  })
+  db.run('DELETE FROM users WHERE username = ?',
+    currentUsername).then(() => {
+    response.redirect('/')
+    response.send('User deleted.')
+  })
+})
+
+// Change username
+app.put('/updatename/:alias', function(request, response) {
+  let alias = request.params.alias
+  let name = request.body.username
+  db.run('UPDATE users SET username=? WHERE username=?;', [name, alias]).then(() => {
+    response.send('Username changed.')
+  })
+})
+
+app.put('/updatepass/:alias', function(request, response) {
+  let alias = request.params.alias
+  let inputPassword = request.body.password
+  let salt = "testsalt"
+  let password = hashPassword(inputPassword, salt)
+  db.run('UPDATE users SET password=? WHERE username=?;', [password, alias]).then(() => {
+    response.send('Password changed.')
+  })
+})
+
 // Register function. Generates a cryptic version of your desired password.
 app.post('/register', function(request, response) {
   let username = request.body.username
