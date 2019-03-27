@@ -66,8 +66,7 @@ app.get('/account', function(request, response) {
   })
 })
 
-app.post('/deposit', function(request, response) {
-
+app.post('/transactions', function(request, response) {
   let activeToken = request.get('Cookie')
   let strippedtoken = activeToken.split('token=')
   let finToken = strippedtoken[1]
@@ -77,10 +76,6 @@ app.post('/deposit', function(request, response) {
     if (rows.length === 0) {
       response.send('Cookie exists however does not match any in our database')
     } else {
-      if (request.body) {
-        let transactionInfo = request.body
-        db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [transactionInfo.amount, rows[0].userId])
-      }
 
       // get accountInfo
       db.all('SELECT * FROM accounts WHERE userId = ?', [rows[0].userId]).then(accountInfo => {
@@ -88,15 +83,30 @@ app.post('/deposit', function(request, response) {
         db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
           // merges the username in the same object as accountInfo
           accountInfo[0].username = user[0].username
+          if (request.body) {
+            let transactionInfo = request.body
+            console.log(accountInfo[0].userBalance)
+            console.log(transactionInfo)
+            db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance + transactionInfo.amount, rows[0].userId])
+            db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance - transactionInfo.amount, rows[0].userId])
+          }
           // sends accountInfo
           response.send(accountInfo[0])
         })
       })
     }
   })
-
-
 })
+
+
+app.post('/management', function(request, response) {
+  let name = request.body.name
+  let id = request.body.id
+
+  db.run('INSERT INTO newBankAccount (userId, name, balance) VALUES (?, ?, ?)', [id, name, 0])
+  response.send('done')
+})
+
 
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
