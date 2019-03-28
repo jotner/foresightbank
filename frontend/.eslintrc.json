@@ -1,0 +1,29 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended"
+  ],
+  "overrides": [
+    {
+      "files": "*.vue",
+      "rules": {
+        "indent": "off"
+      }
+    }
+  ],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": [
+    "html"
+  ],
+  "rules": {
+    "no-console": "off",
+    "vue/no-v-html": "off",
+    "vue/script-indent": ["error", 2, { "baseIndent": 1 }]
+  }
+}

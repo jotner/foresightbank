@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="section product-header">
+    <div class="section product-header">
     <div class="container">
       <div class="columns">
         <div class="column">

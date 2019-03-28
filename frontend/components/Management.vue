@@ -1,41 +1,5 @@
 <template>
   <section>
-      <div class="hero">
-        <b-dropdown v-model="isPublic" aria-role="list">
-        <button class="button is-primary" type="button" slot="trigger">
-            <template v-if="isPublic">
-                <b-icon icon="earth"></b-icon>
-                <span>Public</span>
-            </template>
-            <template v-else>
-                <b-icon icon="account-multiple"></b-icon>
-                <span>Friends</span>
-            </template>
-            <b-icon icon="menu-down"></b-icon>
-        </button>
-
-        <b-dropdown-item :value="true" aria-role="listitem">
-            <div class="media">
-                <b-icon class="media-left" icon="earth"></b-icon>
-                <div class="media-content">
-                    <h3>Public</h3>
-                    <small>Everyone can see</small>
-                </div>
-            </div>
-        </b-dropdown-item>
-
-        <b-dropdown-item :value="false" aria-role="listitem">
-            <div class="media">
-                <b-icon class="media-left" icon="account-multiple"></b-icon>
-                <div class="media-content">
-                    <h3>Friends</h3>
-                    <small>Only friends can see</small>
-                </div>
-            </div>
-        </b-dropdown-item>
-    </b-dropdown>
-  </div>
-
   <div class="section product-header">
     <div class="container">
       <div class="columns">
@@ -46,6 +10,79 @@
       </div>
     </div>
   </div>
+
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-4">Transfer</h2>
+          <b-dropdown v-model="isPublic" aria-role="list">
+            <button class="button is-primary" type="button" slot="trigger">
+              <template v-if="isPublic">
+                <b-icon icon="earth"></b-icon>
+                <span>From</span>
+                  </template>
+                  <template v-else>
+                    <b-icon icon="account-multiple"></b-icon>
+                    <span>Friends</span>
+                  </template>
+                  <b-icon icon="menu-down"></b-icon>
+                </button>
+
+                <b-dropdown-item :value="true" aria-role="listitem">
+                  <div class="media">
+                    <b-icon class="media-left" icon="earth"></b-icon>
+                    <div class="media-content">
+                      <h3>1</h3>
+                </div>
+                    </div>
+          </b-dropdown-item>
+
+          <b-dropdown-item :value="false" aria-role="listitem">
+              <div class="media">
+                  <b-icon class="media-left" icon="account-multiple"></b-icon>
+                  <div class="media-content">
+                      <h3>2</h3>
+                  </div>
+              </div>
+          </b-dropdown-item>
+      </b-dropdown>
+
+      <b-dropdown v-model="isPublic" aria-role="list">
+        <button class="button is-primary" type="button" slot="trigger">
+          <template v-if="isPublic">
+            <b-icon icon="earth"></b-icon>
+            <span>To</span>
+              </template>
+              <template v-else>
+                <b-icon icon="account-multiple"></b-icon>
+                <span>Friends</span>
+              </template>
+              <b-icon icon="menu-down"></b-icon>
+            </button>
+
+            <b-dropdown-item :value="true" aria-role="listitem">
+              <div class="media">
+                <b-icon class="media-left" icon="earth"></b-icon>
+                <div class="media-content">
+                  <h3>1</h3>
+            </div>
+                </div>
+      </b-dropdown-item>
+
+      <b-dropdown-item :value="false" aria-role="listitem">
+          <div class="media">
+              <b-icon class="media-left" icon="account-multiple"></b-icon>
+              <div class="media-content">
+                  <h3>2</h3>
+              </div>
+          </div>
+      </b-dropdown-item>
+  </b-dropdown>
+<a v-on:click="newBankAccountName" class="button">Transfer</a>
+    </div>
+    </div>
+    </section>
+
 
   <section class="hero is-white">
     <div class="hero-body">
@@ -59,8 +96,8 @@
   </section>
 
   <h2 class="title is-5 has-text-centered">Active accounts</h2>
-  <div 
-    v-for="newAccount in newAccounts" 
+  <div
+    v-for="newAccount in newAccounts"
     :key="newAccount.id"
     class="list is-hoverable">
   <a class="list-item">
