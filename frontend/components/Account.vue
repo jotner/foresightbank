@@ -63,7 +63,7 @@
                 <div class="modal-card">
                   <section class="modal-card-body">
                     <input v-model="amount" class="input" type="text" placeholder="Deposit amount">
-                    <a v-on:click="transaction" class="button">Deposit</a>
+                    <a style="width:80px;" v-on:click="transaction" class="button">Transfer</a>
                     <hr class="dropdown-divider">
                   </section>
                 </div>
@@ -211,6 +211,7 @@ b-dropdown {
 .tabs a {
   display: inline-block;
 }
+
 </style>
 
 <script>
@@ -220,11 +221,17 @@ export default {
       .then(result => {
         this.user = result
       })
+      fetch('/api/management').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+        .then(result => {
+          this.newAccount = result
+          console.log(this.newAccount);
+        })
   },
   data() {
     return {
       user: null,
-      amount: null
+      amount: null,
+      newAccount:[],
     }
   },
   methods: {
