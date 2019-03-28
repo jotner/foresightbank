@@ -28,32 +28,32 @@
 </template>
 
 <script>
-export default {
-  created() {
-    fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-      .then(result => {
-        this.user = result
-      })
-  },
-  data() {
-    return{
-      user: null,
-      nameInput: null
-    }
-  },
-  methods: {
-    newBankAccountName(){
-      let bankAccountName = {name:this.nameInput,id:this.user.userId}
-      fetch('/api/management/', {
-        body: JSON.stringify(bankAccountName),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST'
-      })
+  export default {
+    created() {
+      fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+        .then(result => {
+          this.user = result
+        })
+    },
+    data() {
+      return{
+        user: null,
+        nameInput: null
+      }
+    },
+    methods: {
+      newBankAccountName(){
+        let bankAccountName = {name:this.nameInput}
+        fetch('/api/management/', {
+          body: JSON.stringify(bankAccountName),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

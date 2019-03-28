@@ -15,37 +15,38 @@ import Buefy from 'buefy'
 
 Vue.use(VueRouter)
 Vue.use(Buefy)
+Vue.config.devtools = true
 
 const router = new VueRouter({
   routes: [{
-      component: Home,
-      path: '/'
-    },
-    {
-      component: LogIn,
-      path: '/login'
-    },
-    {
-      component: Register,
-      path: '/register'
-    },
-    {
-      component: Account,
-      path: '/account'
-    },
-    {
-      component: About,
-      path: '/about'
-    },
-    {
-      component: Contact,
-      path: '/contact'
-    },
-    {
-      component: Payments,
-      path: '/account/payments'
-    },
-    {
+    component: Home,
+    path: '/'
+  },
+  {
+    component: LogIn,
+    path: '/login'
+  },
+  {
+    component: Register,
+    path: '/register'
+  },
+  {
+    component: Account,
+    path: '/account'
+  },
+  {
+    component: About,
+    path: '/about'
+  },
+  {
+    component: Contact,
+    path: '/contact'
+  },
+  {
+    component: Payments,
+    path: '/account/payments'
+  },
+  {
       component: Stocks,
       path: '/account/stocks'
     },
