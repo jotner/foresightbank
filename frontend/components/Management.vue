@@ -19,6 +19,7 @@
         </a>
         <b-field label="Name">
          <b-input v-model="nameInput" placeholder="Enter the name of your new account"></b-input>
+         <a v-on:click="newBankAccountName" class="button">Create account</a>
        </b-field>
       </div>
     </div>
@@ -29,7 +30,7 @@
 <script>
 export default {
   created() {
-    fetch('/api/management').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+    fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
       .then(result => {
         this.user = result
       })
@@ -42,8 +43,8 @@ export default {
   },
   methods: {
     newBankAccountName(){
-      let bankAccountName = {name:this.nameInput,id:this.user.id}
-      fetch('/api/transactions/', {
+      let bankAccountName = {name:this.nameInput,id:this.user.userId}
+      fetch('/api/management/', {
         body: JSON.stringify(bankAccountName),
         headers: {
           'Content-Type': 'application/json'
