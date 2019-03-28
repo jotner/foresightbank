@@ -251,7 +251,7 @@ b-dropdown {
     },
     methods: {
       work() {
-        
+
 
       },
       transaction() {
