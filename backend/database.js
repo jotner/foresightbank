@@ -107,6 +107,14 @@ app.post('/management', function(request, response) {
   response.send('done')
 })
 
+app.get('/registeraccount', function(request, response) {
+  let name = request.body.name
+  let id = request.body.id
+
+  db.run('INSERT INTO newBankAccount (userId, name, balance) VALUES (?, ?, ?)', [id, name, 0])
+  response.send('done')
+})
+
 
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
