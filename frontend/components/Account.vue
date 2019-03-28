@@ -91,7 +91,11 @@
             </b-dropdown>
           </p>
         </div>
-        <div v-for="newAccount in newAccounts" class="panel" >
+        <div
+          v-for="newAccount in newAccounts"
+          :key="newAccount.id"
+          class="panel"
+        >
           <p class="panel-heading is-size-4">
             <span>{{newAccount.name}} - {{newAccount.balance}}kr</span>
             <b-dropdown position="is-bottom-right" aria-role="menu">
