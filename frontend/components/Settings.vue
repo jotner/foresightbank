@@ -28,10 +28,13 @@
                 <router-link to="/account">My Account</router-link>
               </li>
               <li>
-                <router-link to="/account/payments">Payments</router-link>
+                <router-link to="/account/stocks">Stocks and Bonds</router-link>
               </li>
               <li>
-                <router-link to="/account/stocks">Stocks and Bonds</router-link>
+                <router-link to="/account/management">Management</router-link>
+              </li>
+              <li>
+                <router-link to="/account/payments">Payments</router-link>
               </li>
               <li>
                 <router-link to="/account/settings">Settings</router-link>

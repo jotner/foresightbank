@@ -52,7 +52,6 @@ const router = new VueRouter({
     {
       component: Settings,
       path: '/account/settings'
-      path: '/stocks'
     },
     {
       component: Management,
