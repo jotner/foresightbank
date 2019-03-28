@@ -254,10 +254,6 @@ b-dropdown {
       }
     },
     methods: {
-      work() {
-
-
-      },
       transaction() {
         let transactionInfo = {
           amount: Number(this.amount)

@@ -1,5 +1,41 @@
 <template>
   <section>
+      <div class="hero">
+        <b-dropdown v-model="isPublic" aria-role="list">
+        <button class="button is-primary" type="button" slot="trigger">
+            <template v-if="isPublic">
+                <b-icon icon="earth"></b-icon>
+                <span>Public</span>
+            </template>
+            <template v-else>
+                <b-icon icon="account-multiple"></b-icon>
+                <span>Friends</span>
+            </template>
+            <b-icon icon="menu-down"></b-icon>
+        </button>
+
+        <b-dropdown-item :value="true" aria-role="listitem">
+            <div class="media">
+                <b-icon class="media-left" icon="earth"></b-icon>
+                <div class="media-content">
+                    <h3>Public</h3>
+                    <small>Everyone can see</small>
+                </div>
+            </div>
+        </b-dropdown-item>
+
+        <b-dropdown-item :value="false" aria-role="listitem">
+            <div class="media">
+                <b-icon class="media-left" icon="account-multiple"></b-icon>
+                <div class="media-content">
+                    <h3>Friends</h3>
+                    <small>Only friends can see</small>
+                </div>
+            </div>
+        </b-dropdown-item>
+    </b-dropdown>
+  </div>
+
   <div class="section product-header">
     <div class="container">
       <div class="columns">
@@ -23,10 +59,13 @@
   </section>
 
   <h2 class="title is-5 has-text-centered">Active accounts</h2>
-  <div v-for="newAccount in newAccounts" class="list is-hoverable">
+  <div 
+    v-for="newAccount in newAccounts" 
+    :key="newAccount.id"
+    class="list is-hoverable">
   <a class="list-item">
     <span>{{newAccount.name}}</span>
-      <a v-on:click="Delete" class="button is-danger">Delete</a>
+      <a v-on:click="deleteBankAccount(newAccount.id)" class="button is-danger">Delete</a>
   </a>
 </div>
 
@@ -40,11 +79,11 @@
         .then(result => {
           this.user = result
         }),
-        fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-          .then(result => {
-            this.newAccounts = result
-            console.log(this.newAccounts)
-          })
+      fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+        .then(result => {
+          this.newAccounts = result
+          console.log(this.newAccounts)
+        })
     },
 
     data() {
@@ -52,9 +91,21 @@
         user: null,
         nameInput: null,
         newAccounts: null,
+        deletedAccount: null,
+        isPublic: true,
       }
     },
     methods: {
+      deleteBankAccount(deleted) {
+        let deletedId = {id:deleted}
+        fetch('/api/deletedbankaccount/', {
+          body: JSON.stringify(deletedId),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'DELETE'
+        })
+      },
       newBankAccountName(){
         let bankAccountName = {name:this.nameInput}
         fetch('/api/management/', {
