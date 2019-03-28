@@ -63,12 +63,12 @@ export default {
   created() {
     eventBus.$on('show-online', (payload) => {
       this.userOnline = payload.online
-      this.username = payload.user
+      this.user.username = payload.user
     })
-    fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+
+    fetch('/api/account').then(response => response.json())
       .then(result => {
         this.user = result
-        this.username = result.username
         this.userOnline = true
       })
   },
@@ -96,5 +96,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.navbar {
+  box-shadow: 0 0.5px 4px 0px gray;
+}
 </style>

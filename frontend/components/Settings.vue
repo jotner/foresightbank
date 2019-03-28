@@ -46,7 +46,7 @@
     </div>
   </nav>
   <div class="columns settings-bg">
-    <div class="container">
+    <div class="container settings-cont">
       <div class="column is-4">
         <form>
           <div class="field">
@@ -64,6 +64,9 @@
 
           </div>
           <button v-on:click="changeName" class="button is-block loginblock">Save changes</button>
+          <b-notification v-if="usernameSuccess" type="notification is-success" class="notification" has-icon>
+            <h1>Username changed!</h1>
+          </b-notification>
           <hr>
           <div class="field">
             <p class="subtitle">Change Password</p>
@@ -77,6 +80,9 @@
             </div>
           </div>
           <button v-on:click="changePass" class="button is-block loginblock">Save changes</button>
+          <b-notification v-if="passwordSuccess" type="notification is-success" class="notification" has-icon>
+            <h1>Password changed!</h1>
+          </b-notification>
           <hr>
           <p>If you no longer need your Foresight Bank account you can permanently delete it.</p>
           <p>Please make sure that all your funds and stocks have been transferred before deleting.</p>
@@ -96,7 +102,11 @@
   color: white;
 }
 
-.container {
+.notification {
+  margin-top: 20px;
+}
+
+.settings-cont {
   margin-top: 20px;
 }
 
@@ -141,6 +151,7 @@
 </style>
 
 <script>
+import eventBus from './eventbus.js'
 export default {
   created() {
     fetch('/api/account').then(response => response.json())
@@ -154,7 +165,10 @@ export default {
       changeUsername: null,
       changePassword: null,
       missingUsername: false,
-      missingPassword: false
+      missingPassword: false,
+      usernameSuccess: false,
+      passwordSuccess: false,
+      showOnline: true
     }
   },
   methods: {
@@ -177,6 +191,8 @@ export default {
       }
     },
     changeName() {
+      this.usernameSuccess = false
+      this.passwordSuccess = false
       this.missingPassword = false
       if (!this.changeUsername) {
         this.missingUsername = true
@@ -195,14 +211,17 @@ export default {
             method: 'PUT'
           })
           .then(() => {
-            this.$router.push({
-              path: '/account'
+            this.usernameSuccess = true
+            eventBus.$emit('show-online', {
+              online: this.showOnline,
+              user: this.changeUsername
             })
-            location.reload()
           })
       }
     },
     changePass() {
+      this.usernameSuccess = false
+      this.passwordSuccess = false
       this.missingUsername = false
       if (!this.changePassword) {
         this.missingPassword = true
@@ -221,10 +240,7 @@ export default {
             method: 'PUT'
           })
           .then(() => {
-            this.$router.push({
-              path: '/account'
-            })
-            location.reload()
+            this.passwordSuccess = true
           })
       }
     }

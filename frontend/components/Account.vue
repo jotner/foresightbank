@@ -6,7 +6,7 @@
         <div class="column">
           <span class="title is-3">Account</span>
           <span class="title is-3 has-text-muted">|</span>
-          <span class="title is-4 has-text-muted username">{{ user.username }}</span>
+          <span class="title is-4 has-text-muted username">{{ user ? user.username : '' }}</span>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
     <div class="column">
       <div class="panel">
         <p class="panel-heading is-size-4">
-          <span>Private account - {{ user.userBalance }}kr</span>
+          <span>Private account - {{ user ? user.userBalance : '' }}kr</span>
 
           <b-dropdown position="is-bottom-right" aria-role="menu">
             <a class="navbar-item" slot="trigger" role="button">
@@ -76,7 +76,7 @@
 
       <div class="panel">
         <p class="panel-heading is-size-4">
-          <span>Stock account - {{ user.stockBalance }}kr</span>
+          <span>Stock account - {{ user ? user.stockBalance : '' }}kr</span>
 
           <b-dropdown position="is-bottom-right" aria-role="menu">
             <a class="navbar-item" slot="trigger" role="button">

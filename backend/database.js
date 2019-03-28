@@ -41,6 +41,7 @@ app.get('/userlist', function(request, response) {
 
 app.get('/account', function(request, response) {
   if (request.get('Cookie') === undefined) {
+    response.status(400)
     response.send('Invalid session or cookie not confirmed')
   }
   let activeToken = request.get('Cookie')
@@ -175,6 +176,28 @@ app.put('/updatepass/:alias', function(request, response) {
   })
 })
 
+app.put('/updatebalance/:balance', function(request, response) {
+  let oldBalance = request.params.balance
+  let amountSent = request.body.balance
+  let userId = request.body.userId
+  let recievingUser = request.body.username
+  let newBalance = oldBalance - amountSent
+
+  db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [newBalance, userId]).then(() => {
+    console.log('User balance updated.');
+  })
+  db.all('SELECT id FROM users WHERE username = ?', [recievingUser]).then((userId) => {
+    console.log(userId);
+    db.all('SELECT userBalance FROM accounts WHERE userId = ?', [userId[0].id]).then((userBalance) => {
+      let recievingBalance = Number(userBalance[0].userBalance) + Number(amountSent)
+      console.log(recievingBalance);
+      db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [recievingBalance, userId[0].id]).then(() => {
+        response.send('Balance updated.')
+      })
+    })
+  })
+})
+
 // Register function. Generates a cryptic version of your desired password.
 app.post('/register', function(request, response) {
   let username = request.body.username
@@ -199,12 +222,3 @@ app.post('/register', function(request, response) {
 app.listen(3000, function() {
   console.log('The service is running!')
 })
-
-// app.put('/change', function(request, response) {
-//   let alias = request.params.alias
-//   name = request.body.name
-//   pop = request.body.population
-//   database.run('UPDATE cities SET population=?, name=? WHERE id=?;', [pop, name, alias]).then(() => {
-//     response.send('Changed')
-//   })
-// })
