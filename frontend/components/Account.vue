@@ -47,53 +47,9 @@
   </nav>
   <div class="columns">
     <div class="column">
-      <div class="panel">
+      <div v-for="account in accounts" :key="account.id" class="panel">
         <p class="panel-heading is-size-4">
-          <span>Private account - {{ user !== null ? user.userBalance : 'user is null' }}kr</span>
-          <b-dropdown position="is-bottom-right" aria-role="menu">
-            <a class="navbar-item" slot="trigger" role="button">
-              <span>Transactions<i class="fa fa-caret-down"></i></span>
-              <b-icon icon="menu-down"></b-icon>
-            </a>
-            <b-dropdown-item aria-role="menu-item" custom paddingless>
-              <form action="">
-                <div class="modal-card">
-                  <section class="modal-card-body">
-                    <input v-model="amount" class="input" type="text" placeholder="Deposit amount">
-                    <a style="width:80px;" v-on:click="transaction" class="button">Transfer</a>
-                    <hr class="dropdown-divider">
-                  </section>
-                </div>
-              </form>
-            </b-dropdown-item>
-          </b-dropdown>
-        </p>
-      </div>
-      <div class="panel">
-        <p class="panel-heading is-size-4">
-          <span>Stock account - {{ user !== null ? user.stockBalance : 'user is null' }}kr</span>
-          <b-dropdown position="is-bottom-right" aria-role="menu">
-            <a class="navbar-item" slot="trigger" role="button">
-              <span>Transactions<i class="fa fa-caret-down"></i></span>
-              <b-icon icon="menu-down"></b-icon>
-            </a>
-            <b-dropdown-item aria-role="menu-item" custom paddingless>
-              <form action="">
-                <div class="modal-card">
-                  <section class="modal-card-body">
-                    <input v-model="amount" class="input" type="text" placeholder="Deposit amount">
-                    <a v-on:click="transaction" class="button">Deposit</a>
-                    <hr class="dropdown-divider">
-                  </section>
-                </div>
-              </form>
-            </b-dropdown-item>
-          </b-dropdown>
-        </p>
-      </div>
-      <div v-for="newAccount in newAccounts" :key="newAccount.id" class="panel">
-        <p class="panel-heading is-size-4">
-          <span>{{newAccount.name}} - {{newAccount.balance}}kr</span>
+          <span v-if="user">{{account.name}} - {{account.balance}}kr</span>
           <b-dropdown position="is-bottom-right" aria-role="menu">
             <a class="navbar-item" slot="trigger" role="button">
               <span>Transactions<i class="fa fa-caret-down"></i></span>
@@ -237,15 +193,14 @@ export default {
       }),
       fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
       .then(result => {
-        this.newAccounts = result
-        console.log(this.newAccounts)
+        this.accounts = result
       })
   },
   data() {
     return {
       user: null,
       amount: null,
-      newAccounts: null,
+      accounts: null,
     }
   },
   methods: {

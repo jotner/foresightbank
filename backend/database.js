@@ -89,13 +89,12 @@ app.post('/transactions', function(request, response) {
         response.send(accountInfo[0])
       })
     })
-
   })
 })
 
 app.delete('/deletedbankaccount', function(request, response) {
   let id = request.body.id
-  db.run('DELETE FROM newBankAccount WHERE id = ?',
+  db.run('DELETE FROM accounts WHERE id = ?',
     id).then(() => {
     response.send('Deleted')
   })
@@ -105,9 +104,9 @@ app.delete('/deletedbankaccount', function(request, response) {
 app.post('/management', function(request, response) {
   let name = request.body.name
   getUserFromRequest(request).then(user => {
-    db.run('INSERT INTO newBankAccount (userId, name, balance) VALUES (?, ?, ?)', [user.userId, name, 0]).then(() => {
-      db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
-        response.send(newAccounts)
+    db.run('INSERT INTO accounts (userId, name, balance) VALUES (?, ?, ?)', [user.userId, name, 0]).then(() => {
+      db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accounts => {
+        response.send(accounts)
       })
     })
   })
@@ -115,8 +114,8 @@ app.post('/management', function(request, response) {
 
 app.get('/registeraccount', function(request, response) {
   getUserFromRequest(request).then(user => {
-    db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
-      response.send(newAccounts)
+    db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accounts => {
+      response.send(accounts)
     })
   })
 })
