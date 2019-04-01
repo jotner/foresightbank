@@ -14,7 +14,9 @@ import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 
 Vue.use(VueRouter)
-Vue.use(Buefy)
+Vue.use(Buefy, {
+  defaultIconPack: 'fa'
+})
 Vue.config.devtools = true
 
 const router = new VueRouter({

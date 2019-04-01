@@ -45,64 +45,96 @@
       </div>
     </div>
   </nav>
-  <div class="columns settings-bg">
-    <div class="container">
-      <div class="column is-4">
-        <form>
-          <div class="field">
+  <div class="columns is-centered settings-bg">
 
-            <p>If you would like to change your username or password you can do so by filling in either of the forms listed below.</p>
-            <p class="subtitle">From Account</p>
-            <b-dropdown hoverable aria-role="list">
-              <button class="button" slot="trigger">
-                <span>Bank Account <i class="fa fa-caret-down"></i></span>
-                <b-icon icon="menu-down"></b-icon>
-              </button>
+    <div class="column is-4">
+      <form>
+        <div class="field">
+          <p class="subtitle">Select Account</p>
 
-              <b-dropdown-item aria-role="listitem">Private</b-dropdown-item>
-              <b-dropdown-item aria-role="listitem">Stock</b-dropdown-item>
-              <b-dropdown-item aria-role="listitem">Something else</b-dropdown-item>
-            </b-dropdown>
-            <p class="subtitle">To User</p>
-            <div class="control has-icons-left">
-              <input v-model="changeUsername" v-if="!missingUsername" class="input is-medium" type="username" placeholder="Username">
-              <input v-model="changeUsername" v-if="missingUsername" class="input is-medium is-danger" type="username" placeholder="New Username">
-              <p v-if="missingUsername" class="help is-danger">New username cannot be empty!</p>
-              <span class="icon is-small is-left">
-                <i class="fa fa-user"></i>
-              </span>
-            </div>
+          <b-dropdown v-model="isPrivate" hoverable aria-role="list">
+            <button class="button" type="button" slot="trigger">
+              <template v-if="isPrivate">
 
+                <p><b>Private Account</b>
+                </p>
+              </template>
+              <template v-else>
+                <p><b>Stock Account</b></p>
+              </template>
+              <i class="fa fa-caret-down caret"></i>
+            </button>
+
+            <b-dropdown-item :value="true" aria-role="listitem">
+              <div class="media">
+                <div class="media-content">
+                  <p><b>Private:</b> ${{ user ? user.userBalance : '' }}
+                  </p>
+                </div>
+              </div>
+            </b-dropdown-item>
+
+            <b-dropdown-item :value="false" aria-role="listitem">
+              <div class="media">
+                <div class="media-content">
+                  <p><b>Stock:</b> ${{ user ? user.stockBalance : '' }}</p>
+                </div>
+              </div>
+            </b-dropdown-item>
+          </b-dropdown>
+          <p class="subtitle">To User</p>
+          <div class="control has-icons-left">
+            <input v-model="toUsername" v-if="!missingUsername" class="input is-medium" type="username" placeholder="Username">
+            <input v-model="toUsername" v-if="missingUsername" class="input is-medium is-danger" type="username" placeholder="Username">
+            <p v-if="missingUsername" class="help is-danger">Field cannot be empty!</p>
+            <span class="icon is-small is-left">
+              <i class="fa fa-user"></i>
+            </span>
           </div>
 
-          <div class="field">
-            <p class="subtitle">Amount</p>
-            <div class="control has-icons-left">
-              <input v-model="changePassword" v-if="!missingPassword" class="input is-medium" type="password" placeholder="Amount">
-              <input v-model="changePassword" v-if="missingPassword" class="input is-danger is-medium" type="password" placeholder="New Password">
-              <p v-if="missingPassword" class="help is-danger">New password cannot be empty!</p>
-              <span class="icon is-small is-left">
-                <i class="fa fa-dollar"></i>
-              </span>
-            </div>
-          </div>
-          <button class="button is-block loginblock">Send</button>
-          <hr>
-        </form>
+        </div>
 
-        <br>
-      </div>
+        <div class="field">
+          <p class="subtitle">Amount</p>
+          <div class="control has-icons-left">
+            <input v-model="amount" v-if="!missingAmount" class="input is-medium" type="number" placeholder="Amount">
+            <input v-model="amount" v-if="missingAmount" class="input is-danger is-medium" type="number" placeholder="Amount">
+            <p v-if="missingAmount" class="help is-danger">Field cannot be empty or contain letters!</p>
+            <span class="icon is-small is-left">
+              <i class="fa fa-dollar"></i>
+            </span>
+          </div>
+        </div>
+        <button v-on:click="sendMoney" class="button is-block loginblock">Send</button>
+        <hr>
+      </form>
+      <b-notification v-if="success" type="is-success" class="notification" has-icon>
+        <h1>Transaction complete!</h1>
+      </b-notification>
+
+      <br>
     </div>
+
   </div>
 </div>
 </template>
 
 <style scoped>
+form {
+  margin-top: 20px;
+  padding: 10px;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+}
+
 .button {
   color: white;
 }
 
-.container {
+.caret {
+  margin-left: 4px;
+}
+
+.settings-container {
   margin-top: 20px;
 }
 
@@ -127,6 +159,14 @@
   border-top: 0px;
 }
 
+.notification {
+  margin-top: 20px;
+}
+
+.notification h1 {
+  font-size: 22px;
+}
+
 .panel-heading {
   background-color: #FFF;
   border-radius: 0px;
@@ -145,3 +185,81 @@
   margin-bottom: 40px;
 }
 </style>
+
+<script>
+export default {
+  created() {
+    fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+      .then(result => {
+        this.user = result
+        this.stockBalance = this.user.stockBalance
+        this.privateBalance = this.user.userBalance
+        this.userId = this.user.userId
+      })
+  },
+  data() {
+    return {
+      isPrivate: true,
+      userId: null,
+      user: null,
+      toUsername: null,
+      amount: null,
+      missingUsername: false,
+      missingAmount: false,
+      privateBalance: null,
+      stockBalance: null,
+      success: false
+    }
+  },
+  methods: {
+    sendMoney() {
+      this.success = false
+      this.missingAmount = false
+      this.missingUsername = false
+      if (!this.amount && !this.toUsername) {
+        this.missingUsername = true
+        this.missingAmount = true
+      } else if (!this.toUsername) {
+        this.missingUsername = true
+        this.missingAmount = false
+      } else if (!this.amount) {
+        this.missingAmount = true
+        this.missingUsername = false
+      } else {
+        this.missingUsername = false
+        this.missingAmount = false
+      }
+      // Continue to register if all inputs are not empty
+      if (this.toUsername && this.amount) {
+        if (this.isPrivate) {
+          if (this.privateBalance >= this.amount && this.amount >= 0) {
+            let info = {
+              balance: this.amount,
+              userId: this.userId,
+              username: this.toUsername
+            }
+            fetch('/api/updatebalance/' + this.privateBalance, {
+                body: JSON.stringify(info),
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                method: 'PUT'
+              })
+              .then(() => {
+                this.success = true
+              })
+          } else {
+            alert('kuk')
+          }
+        } else if (!this.isPrivate) {
+          if (this.stockBalance >= this.amount && this.amount >= 0) {
+            alert('you have more than enough')
+          } else {
+            alert('kuk')
+          }
+        }
+      }
+    }
+  }
+}
+</script>

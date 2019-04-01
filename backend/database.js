@@ -5,18 +5,9 @@ const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
 const uuidv4 = require('uuid/v4')
-// let cors = require('cors')
-// app.use((request, response, next) => {
-//   response.header('Access-Control-Allow-Credentials', 'true')
-//   response.header('Access-Control-Allow-Origin', 'http://localhost:8080')
-//   response.header('Access-Control-Allow-Headers', 'Content-Type, Cookie')
-//   next()
-// })
-app.use(bodyParser.json())
-// app.use(cors())
-app.use(express.static(path.join(path.resolve(), 'public')))
 
-// app.set('etag', false)
+app.use(bodyParser.json())
+app.use(express.static(path.join(path.resolve(), 'public')))
 
 let db
 
@@ -24,7 +15,7 @@ sqlite.open('./database.sqlite').then(database_ => {
   db = database_
 })
 
-// Function for crypting passwords.
+// Function for crypting passwords
 function hashPassword(password, salt) {
   var hash = crypto.createHash('sha256')
   hash.update(password)
@@ -32,7 +23,7 @@ function hashPassword(password, salt) {
   return hash.digest('hex')
 }
 
-// Fetch all users in a list.
+// Fetch all users in a list
 app.get('/userlist', function(request, response) {
   db.all('SELECT * FROM users').then(users => {
     response.send(users)
@@ -41,6 +32,7 @@ app.get('/userlist', function(request, response) {
 
 app.get('/account', function(request, response) {
   if (request.get('Cookie') === undefined) {
+    response.status(400)
     response.send('Invalid session or cookie not confirmed')
   }
   let activeToken = request.get('Cookie')
@@ -188,6 +180,7 @@ app.put('/updatename/:alias', function(request, response) {
   })
 })
 
+// Change password
 app.put('/updatepass/:alias', function(request, response) {
   let alias = request.params.alias
   let inputPassword = request.body.password
@@ -195,6 +188,28 @@ app.put('/updatepass/:alias', function(request, response) {
   let password = hashPassword(inputPassword, salt)
   db.run('UPDATE users SET password=? WHERE username=?;', [password, alias]).then(() => {
     response.send('Password changed.')
+  })
+})
+
+app.put('/updatebalance/:balance', function(request, response) {
+  let oldBalance = request.params.balance
+  let amountSent = request.body.balance
+  let userId = request.body.userId
+  let recievingUser = request.body.username
+  let newBalance = oldBalance - amountSent
+
+  db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [newBalance, userId]).then(() => {
+    console.log('User balance updated.');
+  })
+  db.all('SELECT id FROM users WHERE username = ?', [recievingUser]).then((userId) => {
+    console.log(userId);
+    db.all('SELECT userBalance FROM accounts WHERE userId = ?', [userId[0].id]).then((userBalance) => {
+      let recievingBalance = Number(userBalance[0].userBalance) + Number(amountSent)
+      console.log(recievingBalance);
+      db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [recievingBalance, userId[0].id]).then(() => {
+        response.send('Balance updated.')
+      })
+    })
   })
 })
 
@@ -222,12 +237,3 @@ app.post('/register', function(request, response) {
 app.listen(3000, function() {
   console.log('The service is running!')
 })
-
-// app.put('/change', function(request, response) {
-//   let alias = request.params.alias
-//   name = request.body.name
-//   pop = request.body.population
-//   database.run('UPDATE cities SET population=?, name=? WHERE id=?;', [pop, name, alias]).then(() => {
-//     response.send('Changed')
-//   })
-// })
