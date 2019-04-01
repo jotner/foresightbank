@@ -104,8 +104,8 @@ app.delete('/deletedbankaccount', function(request, response) {
 app.post('/management', function(request, response) {
   let name = request.body.name
   getUserFromRequest(request).then(user => {
-    db.run('INSERT INTO newBankAccount (userId, name, balance) VALUES (?, ?, ?)', [user.userId, name, 0]).then(() => {
-      db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
+    db.run('INSERT INTO accounts (userId, name, balance) VALUES (?, ?, ?)', [user.userId, name, 0]).then(() => {
+      db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(newAccounts => {
         response.send(newAccounts)
       })
     })
