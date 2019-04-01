@@ -77,17 +77,15 @@ app.post('/transactions', function(request, response) {
     // get accountInfo
     db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accountInfo => {
       // get username
-      db.all('SELECT username FROM users WHERE id = ?', [user.userId]).then(userInfo => {
-        // merges the username in the same object as accountInfo
-        accountInfo[0].username = userInfo[0].username
-        if (request.body) {
-          let transactionInfo = request.body
-          db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance + transactionInfo.amount, user.userId])
-          db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance - transactionInfo.amount, user.userId])
-        }
-        // sends accountInfo
-        response.send(accountInfo[0])
-      })
+      if (request.body) {
+        let from = request.body.from
+        let to = request.body.to
+        let transactionInfo = request.body.amount
+        db.all('UPDATE accounts SET balance = ? WHERE userId = ? AND name = ?', [accountInfo[0].balance + transactionInfo.amount, user.userId, from])
+        db.all('UPDATE accounts SET balance = ? WHERE userId = ? AND name = ?', [accountInfo[0].balance - transactionInfo.amount, user.userId, to])
+      }
+      // sends accountInfo
+      response.send(accountInfo[0])
     })
   })
 })
