@@ -2,6 +2,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   devServer: {
+
     proxy: {
       '/api': {
         pathRewrite: {
@@ -14,8 +15,7 @@ module.exports = {
   entry: './index.js',
   mode: 'development',
   module: {
-    rules: [
-      {
+    rules: [{
         loader: ['vue-style-loader', 'css-loader'],
         test: /\.css$/
       },

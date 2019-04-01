@@ -50,7 +50,6 @@ app.get('/account', function(request, response) {
         db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
           // merges the username in the same object as accountInfo
           accountInfo[0].username = user[0].username
-          console.log(user[0].username);
           // sends accountInfo
           response.send(accountInfo[0])
         })
@@ -95,7 +94,7 @@ app.post('/transactions', function(request, response) {
 
 app.delete('/deletedbankaccount', function(request, response) {
   let id = request.body.id
-  db.run('DELETE FROM newBankAccount WHERE id = ?',
+  db.run('DELETE FROM accounts WHERE id = ?',
     id).then(() => {
     response.send('Deleted')
   })
@@ -106,8 +105,8 @@ app.post('/management', function(request, response) {
   let name = request.body.name
   getUserFromRequest(request).then(user => {
     db.run('INSERT INTO accounts (userId, name, balance) VALUES (?, ?, ?)', [user.userId, name, 0]).then(() => {
-      db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(newAccounts => {
-        response.send(newAccounts)
+      db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accounts => {
+        response.send(accounts)
       })
     })
   })
@@ -115,8 +114,8 @@ app.post('/management', function(request, response) {
 
 app.get('/registeraccount', function(request, response) {
   getUserFromRequest(request).then(user => {
-    db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
-      response.send(newAccounts)
+    db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accounts => {
+      response.send(accounts)
     })
   })
 })
@@ -221,7 +220,7 @@ app.post('/register', function(request, response) {
   let password = hashPassword(inputPassword, salt)
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
-      db.run('INSERT INTO accounts(userId, userbalance, stockbalance) VALUES(?, 0, 0)', [id])
+      db.run('INSERT INTO accounts(userId, name, balance) VALUES(?, "Private Account", 0)', [id])
         .then(() => {
           response.send('You are now registered as ' + request.body.username + '.')
         })
