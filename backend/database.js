@@ -80,9 +80,13 @@ app.post('/transactions', function(request, response) {
       if (request.body) {
         let from = request.body.from
         let to = request.body.to
-        let transactionInfo = request.body.amount
-        db.all('UPDATE accounts SET balance = ? WHERE userId = ? AND name = ?', [accountInfo[0].balance + transactionInfo.amount, user.userId, from])
-        db.all('UPDATE accounts SET balance = ? WHERE userId = ? AND name = ?', [accountInfo[0].balance - transactionInfo.amount, user.userId, to])
+
+        let amount = request.body.amount
+        if (true) {
+          db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
+          db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
+        }
+        console.log(accountInfo);
       }
       // sends accountInfo
       response.send(accountInfo[0])
