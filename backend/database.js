@@ -5,18 +5,9 @@ const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
 const uuidv4 = require('uuid/v4')
-// let cors = require('cors')
-// app.use((request, response, next) => {
-//   response.header('Access-Control-Allow-Credentials', 'true')
-//   response.header('Access-Control-Allow-Origin', 'http://localhost:8080')
-//   response.header('Access-Control-Allow-Headers', 'Content-Type, Cookie')
-//   next()
-// })
-app.use(bodyParser.json())
-// app.use(cors())
-app.use(express.static(path.join(path.resolve(), 'public')))
 
-// app.set('etag', false)
+app.use(bodyParser.json())
+app.use(express.static(path.join(path.resolve(), 'public')))
 
 let db
 
@@ -24,7 +15,7 @@ sqlite.open('./database.sqlite').then(database_ => {
   db = database_
 })
 
-// Function for crypting passwords.
+// Function for crypting passwords
 function hashPassword(password, salt) {
   var hash = crypto.createHash('sha256')
   hash.update(password)
@@ -32,7 +23,7 @@ function hashPassword(password, salt) {
   return hash.digest('hex')
 }
 
-// Fetch all users in a list.
+// Fetch all users in a list
 app.get('/userlist', function(request, response) {
   db.all('SELECT * FROM users').then(users => {
     response.send(users)
@@ -67,45 +58,67 @@ app.get('/account', function(request, response) {
   })
 })
 
-app.post('/transactions', function(request, response) {
+let getUserFromRequest = request => {
   let activeToken = request.get('Cookie')
   let strippedtoken = activeToken.split('token=')
   let finToken = strippedtoken[1]
   // Get the userId from the active user
-  db.all('SELECT userId FROM tokens WHERE token = ?',
-    finToken).then(rows => {
-    if (rows.length === 0) {
-      response.send('Cookie exists however does not match any in our database')
+  return db.all('SELECT userId FROM tokens WHERE token = ?', finToken).then(userId => {
+    if (userId.length === 0) {
+      return null
     } else {
-
-      // get accountInfo
-      db.all('SELECT * FROM accounts WHERE userId = ?', [rows[0].userId]).then(accountInfo => {
-        // get username
-        db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
-          // merges the username in the same object as accountInfo
-          accountInfo[0].username = user[0].username
-          if (request.body) {
-            let transactionInfo = request.body
-            console.log(accountInfo[0].userBalance)
-            console.log(transactionInfo)
-            db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance + transactionInfo.amount, rows[0].userId])
-            db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance - transactionInfo.amount, rows[0].userId])
-          }
-          // sends accountInfo
-          response.send(accountInfo[0])
-        })
-      })
+      return userId[0]
     }
+  })
+}
+
+app.post('/transactions', function(request, response) {
+  getUserFromRequest(request).then(user => {
+    // get accountInfo
+    db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accountInfo => {
+      // get username
+      db.all('SELECT username FROM users WHERE id = ?', [user.userId]).then(userInfo => {
+        // merges the username in the same object as accountInfo
+        accountInfo[0].username = userInfo[0].username
+        if (request.body) {
+          let transactionInfo = request.body
+          db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance + transactionInfo.amount, user.userId])
+          db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance - transactionInfo.amount, user.userId])
+        }
+        // sends accountInfo
+        response.send(accountInfo[0])
+      })
+    })
+
+  })
+})
+
+app.delete('/deletedbankaccount', function(request, response) {
+  let id = request.body.id
+  db.run('DELETE FROM newBankAccount WHERE id = ?',
+    id).then(() => {
+    response.send('Deleted')
   })
 })
 
 
 app.post('/management', function(request, response) {
   let name = request.body.name
-  let id = request.body.id
+  getUserFromRequest(request).then(user => {
+    db.run('INSERT INTO newBankAccount (userId, name, balance) VALUES (?, ?, ?)', [user.userId, name, 0]).then(() => {
+      db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
+        response.send(newAccounts)
+      })
+    })
+  })
+})
 
-  db.run('INSERT INTO newBankAccount (userId, name, balance) VALUES (?, ?, ?)', [id, name, 0])
-  response.send('done')
+app.get('/registeraccount', function(request, response) {
+  getUserFromRequest(request).then(user => {
+    db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
+      response.send(newAccounts)
+    })
+  })
 })
 
 
@@ -140,7 +153,7 @@ app.delete('/logout', function(request, response) {
     finToken).then(() => {
     response.send('Logged out!')
   })
-  response.clearCookie("token");
+  response.clearCookie("token")
   response.redirect('/')
 })
 
@@ -166,6 +179,7 @@ app.put('/updatename/:alias', function(request, response) {
   })
 })
 
+// Change password
 app.put('/updatepass/:alias', function(request, response) {
   let alias = request.params.alias
   let inputPassword = request.body.password
