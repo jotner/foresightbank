@@ -11,15 +11,17 @@
       </div>
     </div>
 
-    <section class="hero is-white">
+    <section class="hero is-white" v-if="accounts && accounts.length === 2">
       <div class="hero-body">
         <div class="container">
-          <h2 class="title is-4">Transfers</h2>
+          <h2 class="title is-4">
+            Transfers
+          </h2>
           <div class="columns has-text-centered">
             <div class="column is-4">
               <p class="content">
                 <b>From :</b>
-                <strong>{{ radioFrom }}</strong>
+                <strong v-if="radioFrom">{{ radioFrom.name }}</strong>
               </p>
 
               <div class="block">
@@ -27,27 +29,35 @@
                   v-for="account in accounts"
                   :key="account.id"
                   v-model="radioFrom"
-                  native-value="default">
+                  name="z"
+                  v-bind:native-value="account"
+                >
                   {{ account.name }}
                 </b-radio>
               </div>
+              <b-input
+                v-model="amount"
+                style="width:400px;"
+                placeholder="Amount"
+              />
             </div>
 
             <div class="column is-5">
               <p class="content">
                 <b>To :</b>
-                <strong>{{ radioTo }}</strong>
+                <strong v-if="radioTo">{{ radioTo.name }}</strong>
               </p>
 
               <div
-                clv-if="accounts.length === 2"
                 class="block"
               >
                 <b-radio
                   v-for="account in accounts"
                   :key="account.id"
                   v-model="radioTo"
-                  native-value="default">
+                  name="w"
+                  v-bind:native-value="account"
+                >
                   {{ account.name }}
                 </b-radio>
               </div>
@@ -55,7 +65,14 @@
             <div class="column">
               <a
                 style="margin-top:25px;"
-                class="button"><i style="font-size:20px;" class="fa fa-arrow-right"></i></a>
+                class="button"
+                v-on:click="transaction(radioFrom,radioTo,amount,radioFrom.id)"
+              >
+                <i
+                  style="font-size:20px;"
+                  class="fa fa-arrow-right"
+                />
+              </a>
             </div>
           </div>
         </div>
@@ -64,7 +81,8 @@
 
     <div
       id="securehero"
-      class="hero is-small">
+      class="hero is-small"
+    >
       <div class="hero-body secbg">
         <div class="container has-text-centered">
           <h2 class="title-index">
@@ -77,17 +95,23 @@
     <section class="hero is-white">
       <div class="hero-body">
         <div class="container">
-          <h2 class="title is-4">Create new account</h2>
+          <h2 class="title is-4">
+            Create new account
+          </h2>
           <div class="columns">
             <div class="column">
               <b-field>
                 <b-input
                   v-model="nameInput"
                   style="width:500px;"
-                  placeholder="Name of account"/>
+                  placeholder="Name of account"
+                />
                 <a
                   class="button"
-                  @:click="newBankAccountName">Create account</a>
+                  v-on:click="newBankAccountName"
+                >
+                  Create account
+                </a>
               </b-field>
             </div>
           </div>
@@ -98,17 +122,21 @@
     <section class="hero is-white">
       <div class="hero-body">
         <div class="container">
-          <h2 class="title is-4">Active accounts</h2>
+          <h2 class="title is-4">
+            Active accounts
+          </h2>
           <div
             v-for="account in accounts"
             :key="account.id"
-            class="list is-hoverable">
+            class="list is-hoverable"
+          >
             <a class="list-item">
-              <p class="title is-5"><span class="has-text-weight-light">Account name | </span>{{account.name}}</p>
-              <p class="title is-5"><span class="has-text-weight-light">Account balance | </span>{{account.balance}}$</p>
+              <p class="title is-5"><span class="has-text-weight-light">Account name | </span>{{ account.name }}</p>
+              <p class="title is-5"><span class="has-text-weight-light">Account balance | </span>{{ account.balance }}$</p>
               <a
                 class="button is-danger"
-                @:click="deleteBankAccount(account.id)">Delete</a>
+                v-on:click="deleteBankAccount(account.id)"
+              >Delete</a>
             </a>
           </div>
         </div>
@@ -128,6 +156,7 @@
         deletedAccount: null,
         radioFrom:null,
         radioTo:null,
+        amount:null,
       }
     },
     created() {
@@ -156,6 +185,22 @@
         let bankAccountName = {name:this.nameInput}
         fetch('/api/management/', {
           body: JSON.stringify(bankAccountName),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        })
+      },
+      transaction(from,to,amount,id) {
+        let transactionInfo = {
+          amount: Number(amount),
+          from:from,
+          to:to,
+          idFrom: id
+        }
+        console.log(this.radioFrom);
+        fetch('/api/transactions/', {
+          body: JSON.stringify(transactionInfo),
           headers: {
             'Content-Type': 'application/json'
           },
