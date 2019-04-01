@@ -197,20 +197,31 @@ app.put('/updatebalance/:balance', function(request, response) {
   let recievingUser = request.body.username
   let newBalance = oldBalance - amountSent
 
-  db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [newBalance, userId]).then(() => {
-    console.log('User balance updated.');
-  })
-  db.all('SELECT id FROM users WHERE username = ?', [recievingUser]).then((userId) => {
-    console.log(userId);
-    db.all('SELECT userBalance FROM accounts WHERE userId = ?', [userId[0].id]).then((userBalance) => {
-      let recievingBalance = Number(userBalance[0].userBalance) + Number(amountSent)
-      console.log(recievingBalance);
-      db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [recievingBalance, userId[0].id]).then(() => {
-        response.send('Balance updated.')
+  db.all('SELECT username FROM users WHERE username=?;', [recievingUser]).then(rows => {
+    console.log(rows);
+    if (rows.length > 0) {
+      db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [newBalance, userId]).then(() => {
+        console.log('User balance updated.')
       })
-    })
+      db.all('SELECT id FROM users WHERE username = ?', [recievingUser]).then((userId) => {
+        console.log(userId);
+        db.all('SELECT userBalance FROM accounts WHERE userId = ?', [userId[0].id]).then((userBalance) => {
+          let recievingBalance = Number(userBalance[0].userBalance) + Number(amountSent)
+          console.log(recievingBalance);
+          db.run('UPDATE accounts WHERE name=? AND userId=? SET balance=?;', ['Private Account', userId[0].id, recievingBalance]).then(() => {
+            response.status(200)
+            response.send('Balance updated.')
+          })
+        })
+      })
+    } else {
+      response.status(400)
+      response.send('User does not exist.')
+    }
   })
+
 })
+
 
 // Register function. Generates a cryptic version of your desired password.
 app.post('/register', function(request, response) {
@@ -221,7 +232,7 @@ app.post('/register', function(request, response) {
   let password = hashPassword(inputPassword, salt)
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
-      db.run('INSERT INTO accounts(userId, userbalance, stockbalance) VALUES(?, 0, 0)', [id])
+      db.run('INSERT INTO accounts(userId, name, balance) VALUES(?, "Private Account", 0)', [id])
         .then(() => {
           response.send('You are now registered as ' + request.body.username + '.')
         })
