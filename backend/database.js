@@ -97,7 +97,6 @@ app.post('/transactions', function(request, response) {
         response.send(accountInfo[0])
       })
     })
-    
   })
 })
 

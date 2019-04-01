@@ -23,28 +23,20 @@
                   </template>
                   <template v-else>
                     <b-icon icon="account-multiple"></b-icon>
-                    <span>Friends</span>
+                    <span>{{from}}</span>
                   </template>
                   <b-icon icon="menu-down"></b-icon>
                 </button>
 
-                <b-dropdown-item :value="true" aria-role="listitem">
-                  <div class="media">
+                <b-dropdown-item v-for="newAccount in newAccounts" :value="true" aria-role="listitem">
+                  <div class="media" >
                     <b-icon class="media-left" icon="earth"></b-icon>
                     <div class="media-content">
-                      <h3>1</h3>
-                </div>
+                      <h3>{{newAccount.name}}</h3>
                     </div>
-          </b-dropdown-item>
-
-          <b-dropdown-item :value="false" aria-role="listitem">
-              <div class="media">
-                  <b-icon class="media-left" icon="account-multiple"></b-icon>
-                  <div class="media-content">
-                      <h3>2</h3>
                   </div>
-              </div>
-          </b-dropdown-item>
+                 </b-dropdown-item>
+
       </b-dropdown>
 
       <b-dropdown v-model="isPublic" aria-role="list">
@@ -55,28 +47,21 @@
               </template>
               <template v-else>
                 <b-icon icon="account-multiple"></b-icon>
-                <span>Friends</span>
+                <span>{{newAccounts.name}}</span>
               </template>
               <b-icon icon="menu-down"></b-icon>
             </button>
 
-            <b-dropdown-item :value="true" aria-role="listitem">
+            <b-dropdown-item v-for="newAccount in newAccounts" v-model="to=newAccount.name" :value="true" aria-role="listitem">
               <div class="media">
                 <b-icon class="media-left" icon="earth"></b-icon>
                 <div class="media-content">
-                  <h3>1</h3>
-            </div>
-                </div>
-      </b-dropdown-item>
-
-      <b-dropdown-item :value="false" aria-role="listitem">
-          <div class="media">
-              <b-icon class="media-left" icon="account-multiple"></b-icon>
-              <div class="media-content">
-                  <h3>2</h3>
+                  <h3>{{newAccount.name}}</h3>
               </div>
-          </div>
-      </b-dropdown-item>
+                </div>
+            </b-dropdown-item>
+
+
   </b-dropdown>
 <a v-on:click="newBankAccountName" class="button">Transfer</a>
     </div>
@@ -93,7 +78,7 @@
        </b-field>
       </div>
     </div>
-  </section>
+</section>
 
   <h2 class="title is-5 has-text-centered">Active accounts</h2>
   <div
@@ -130,6 +115,8 @@
         newAccounts: null,
         deletedAccount: null,
         isPublic: true,
+        from: null,
+        to: null,
       }
     },
     methods: {
