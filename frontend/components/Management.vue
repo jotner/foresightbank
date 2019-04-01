@@ -101,16 +101,6 @@
 
 <script>
   export default {
-    created() {
-      fetch('/api/account/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-        .then(result => {
-          this.user = result
-        }),
-      fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-        .then(result => {
-          this.newAccounts = result
-        })
-    },
 
     data() {
       return{
@@ -121,6 +111,16 @@
         radioFrom:null,
         radioTo:null,
       }
+    },
+    created() {
+      fetch('/api/account/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+        .then(result => {
+          this.user = result
+        }),
+      fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+        .then(result => {
+          this.newAccounts = result
+        })
     },
     methods: {
       deleteBankAccount(deleted) {
