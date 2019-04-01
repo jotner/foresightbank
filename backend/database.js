@@ -58,6 +58,7 @@ app.get('/account', function(request, response) {
         db.all('SELECT username FROM users WHERE id = ?', [rows[0].userId]).then(user => {
           // merges the username in the same object as accountInfo
           accountInfo[0].username = user[0].username
+          console.log(user[0].username);
           // sends accountInfo
           response.send(accountInfo[0])
         })
@@ -97,7 +98,7 @@ app.post('/transactions', function(request, response) {
         response.send(accountInfo[0])
       })
     })
-    
+
   })
 })
 
@@ -120,7 +121,7 @@ app.post('/management', function(request, response) {
     })
   })
 })
-  
+
 app.get('/registeraccount', function(request, response) {
   getUserFromRequest(request).then(user => {
     db.all('SELECT * FROM newBankAccount WHERE userId = ?', [user.userId]).then(newAccounts => {
