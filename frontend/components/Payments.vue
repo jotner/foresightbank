@@ -108,8 +108,8 @@
         <button v-on:click="sendMoney" class="button is-block loginblock">Send</button>
         <hr>
       </form>
-      <b-notification v-if="success" type="is-success" class="notification" has-icon>
-        <h1>Transaction complete!</h1>
+      <b-notification v-if="!userExists" type="is-warning" class="notification" has-icon>
+        <h1>User does not exist!</h1>
       </b-notification>
 
       <br>
@@ -204,15 +204,16 @@ export default {
       user: null,
       toUsername: null,
       amount: null,
+      userExists: true,
       missingUsername: false,
       missingAmount: false,
       privateBalance: null,
       stockBalance: null,
-      success: false
     }
   },
   methods: {
     sendMoney() {
+      this.userExists = true
       this.success = false
       this.missingAmount = false
       this.missingUsername = false
@@ -245,11 +246,24 @@ export default {
                 },
                 method: 'PUT'
               })
-              .then(() => {
-                this.success = true
+              .then(response => {
+                if (response.status === 200) {
+                  this.$toast.open({
+                    message: 'Transaction complete!',
+                    type: 'is-success',
+                    duration: 4000,
+                  })
+                } else {
+                  this.userExists = false
+                }
+
               })
           } else {
-            alert('kuk')
+            this.$toast.open({
+              message: 'Insufficient funds!',
+              type: 'is-danger',
+              duration: 4000,
+            })
           }
         } else if (!this.isPrivate) {
           if (this.stockBalance >= this.amount && this.amount >= 0) {
