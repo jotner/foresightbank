@@ -75,18 +75,25 @@ let getUserFromRequest = request => {
 app.post('/transactions', function(request, response) {
   getUserFromRequest(request).then(user => {
     // get accountInfo
-    db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accountInfo => {
+    db.all('SELECT * FROM accounts WHERE userId = ? AND id = ?', [user.userId, request.body.idFrom]).then(accountInfo => {
       // get username
       if (request.body) {
         let from = request.body.from
         let to = request.body.to
-
         let amount = request.body.amount
-        if (true) {
-          db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
-          db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
+        
+        console.log(accountInfo[0].balance, amount, from, to)
+        if (amount > 0) {
+          if (accountInfo[0].balance >= amount) {
+            console.log('hej')
+            db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
+            db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
+          } else {
+            response.send('Insufficient funds.')
+          }
+        } else {
+          response.send('Write a positive number!')
         }
-        console.log(accountInfo);
       }
       // sends accountInfo
       response.send(accountInfo[0])
