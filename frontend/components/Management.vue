@@ -67,7 +67,7 @@
               <a
                 style="margin-top:25px;"
                 class="button"
-                v-on:click="transaction(radioFrom,radioTo,amount,radioFrom.id)"
+                v-on:click="transaction(radioFrom.name,radioTo.name,amount,radioFrom.id)"
               >
                 <i
                   style="font-size:20px;"
@@ -199,7 +199,7 @@
           to:to,
           idFrom: id
         }
-        console.log(this.radioFrom);
+        console.log(transactionInfo);
         fetch('/api/transactions/', {
           body: JSON.stringify(transactionInfo),
           headers: {
