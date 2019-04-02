@@ -4,13 +4,13 @@
       <div class="container">
         <div class="columns">
           <div class="column">
-            <span class="title is-3">Management</span>
+            <span class="title is-3">Account</span>
             <span class="title is-3 has-text-muted">|</span>
+            <span class="title is-4 has-text-muted username">Management</span>
           </div>
         </div>
       </div>
     </div>
-
     <nav class="navbar">
       <div class="container">
         <div class="navbar-brand">
@@ -45,7 +45,6 @@
         </div>
       </div>
     </nav>
-
     <section class="hero is-white" v-if="accounts && accounts.length === 2">
       <div class="hero-body">
         <div class="container">
@@ -58,14 +57,13 @@
                 <b>From :</b>
                 <strong v-if="radioFrom">{{ radioFrom.name }}</strong>
               </p>
-
               <div class="block">
                 <b-radio
                   v-for="account in accounts"
                   :key="account.id"
                   v-model="radioFrom"
                   name="z"
-                  v-bind:native-value="account"
+                  :native-value="account"
                 >
                   {{ account.name }}
                 </b-radio>
@@ -75,17 +73,18 @@
                 style="width:400px;"
                 placeholder="Amount"
               />
-              <b-notification v-if="error" type="is-warning" class="notification" has-icon>
-                <h1>{{ error }}</h1>
+              <b-notification v-if="message && message.error" type="is-warning" class="notification" has-icon>
+                <h1>{{ message.error }}</h1>
+              </b-notification>
+              <b-notification v-if="message && message.success" type="is-success" class="notification" has-icon>
+                <h1>{{ message.success }}</h1>
               </b-notification>
             </div>
-
             <div class="column is-5">
               <p class="content">
                 <b>To :</b>
                 <strong v-if="radioTo">{{ radioTo.name }}</strong>
               </p>
-
               <div
                 class="block"
               >
@@ -94,7 +93,7 @@
                   :key="account.id"
                   v-model="radioTo"
                   name="w"
-                  v-bind:native-value="account"
+                  :native-value="account"
                 >
                   {{ account.name }}
                 </b-radio>
@@ -104,7 +103,7 @@
               <a
                 style="margin-top:25px;"
                 class="button"
-                v-on:click="transaction(radioFrom.name,radioTo.name,amount,radioFrom.id)"
+                @click="transaction(radioFrom.name,radioTo.name,amount,radioFrom.id)"
               >
                 <i
                   style="font-size:20px;"
@@ -116,7 +115,6 @@
         </div>
       </div>
     </section>
-
     <div
       id="securehero"
       class="hero is-small"
@@ -129,7 +127,6 @@
         </div>
       </div>
     </div>
-
     <section class="hero is-white">
       <div class="hero-body">
         <div class="container">
@@ -146,7 +143,7 @@
                 />
                 <a
                   class="button"
-                  v-on:click="newBankAccountName"
+                  @click="newBankAccountName"
                 >
                   Create account
                 </a>
@@ -156,7 +153,6 @@
         </div>
       </div>
     </section>
-
     <section class="hero is-white">
       <div class="hero-body">
         <div class="container">
@@ -170,11 +166,11 @@
           >
             <a class="list-item">
               <p class="title is-5"><span class="has-text-weight-light">Account name | </span>{{ account.name }}</p>
-              <p class="title is-5"><span class="has-text-weight-light">Account balance | </span>{{ account.balance }}$</p>
+              <p class="title is-5"><span class="has-text-weight-light">Account balance | </span>${{ account.balance }}</p>
               <a
                 v-if="account.name !== 'Private Account'"
                 class="button is-danger"
-                v-on:click="deleteBankAccount(account.id)"
+                @click="deleteBankAccount(account.id)"
               >Delete</a>
             </a>
           </div>
@@ -186,7 +182,6 @@
 
 <script>
   export default {
-
     data() {
       return{
         user: null,
@@ -196,7 +191,7 @@
         radioFrom:null,
         radioTo:null,
         amount:null,
-        error:null,
+        message:null,
       }
     },
     created() {
@@ -207,15 +202,19 @@
       fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
         .then(result => {
           this.accounts = result
-        }),
-      fetch('/api/transactions/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-        .then(result => {
-          this.error = result
-          console.log(this.error);
         })
-
     },
     methods: {
+      getUserInfo() {
+        fetch('/api/account/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+          .then(result => {
+            this.user = result
+          }),
+        fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+          .then(result => {
+            this.accounts = result
+          })
+      },
       deleteBankAccount(deleted) {
         let deletedId = {id:deleted}
         fetch('/api/deletedbankaccount/', {
@@ -253,9 +252,12 @@
             'Content-Type': 'application/json'
           },
           method: 'POST'
-        }).then(()=>{
-          location.reload()
-        })
+        }).then(response => response.json())
+          .then(result => {
+            this.message = result
+            console.log(this.message);
+            this.getUserInfo()
+          })
       }
     }
   }

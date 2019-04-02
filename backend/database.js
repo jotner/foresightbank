@@ -74,7 +74,7 @@ let getUserFromRequest = request => {
 
 app.post('/transactions', function(request, response) {
   getUserFromRequest(request).then(user => {
-    let message = null
+    let message = {}
     let from = request.body.from
     let to = request.body.to
     let amount = request.body.amount
@@ -83,16 +83,17 @@ app.post('/transactions', function(request, response) {
     db.all('SELECT * FROM accounts WHERE userId = ? AND id = ?', [user.userId, request.body.idFrom]).then(accountInfo => {
       // get username
       if (request.body) {
-        if (amount > 0) {
+        if (amount > 0 && amount !== undefined) {
           if (accountInfo[0].balance >= amount) {
             console.log('hej')
             db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
             db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
+            message.success = "Transaction Completed"
           } else {
-            message = 'Insufficient funds.'
+            message.error = 'Insufficient funds.'
           }
         } else {
-          message = 'Write a positive number!'
+          message.error = 'Write a positive number!'
         }
       }
       // sends accountInfo
@@ -108,7 +109,6 @@ app.delete('/deletedbankaccount', function(request, response) {
     response.send('Deleted')
   })
 })
-
 
 app.post('/management', function(request, response) {
   let name = request.body.name
@@ -128,7 +128,6 @@ app.get('/registeraccount', function(request, response) {
     })
   })
 })
-
 
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
@@ -229,7 +228,6 @@ app.put('/updatebalance/:balance', function(request, response) {
   })
 
 })
-
 
 // Register function. Generates a cryptic version of your desired password.
 app.post('/register', function(request, response) {
