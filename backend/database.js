@@ -81,7 +81,7 @@ app.post('/transactions', function(request, response) {
         let from = request.body.from
         let to = request.body.to
         let amount = request.body.amount
-        
+
         console.log(accountInfo[0].balance, amount, from, to)
         if (amount > 0) {
           if (accountInfo[0].balance >= amount) {
