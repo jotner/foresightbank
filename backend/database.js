@@ -74,14 +74,15 @@ let getUserFromRequest = request => {
 
 app.post('/transactions', function(request, response) {
   getUserFromRequest(request).then(user => {
+    let message = null
+    let from = request.body.from
+    let to = request.body.to
+    let amount = request.body.amount
+    
     // get accountInfo
     db.all('SELECT * FROM accounts WHERE userId = ? AND id = ?', [user.userId, request.body.idFrom]).then(accountInfo => {
       // get username
       if (request.body) {
-        let from = request.body.from
-        let to = request.body.to
-        let amount = request.body.amount
-        
         console.log(accountInfo[0].balance, amount, from, to)
         if (amount > 0) {
           if (accountInfo[0].balance >= amount) {
@@ -89,14 +90,14 @@ app.post('/transactions', function(request, response) {
             db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
             db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
           } else {
-            response.send('Insufficient funds.')
+            message = 'Insufficient funds.'
           }
         } else {
-          response.send('Write a positive number!')
+          message = 'Write a positive number!'
         }
       }
       // sends accountInfo
-      response.send(accountInfo[0])
+      response.send(message)
     })
   })
 })
