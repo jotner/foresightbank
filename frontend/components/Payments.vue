@@ -97,6 +97,72 @@
         <h1>Transaction complete!</h1>
       </b-notification>
       <br>
+      </nav>
+      <div class="columns is-centered settings-bg">
+        <div class="column is-4">
+          <form>
+            <div class="field">
+              <p class="subtitle">Select Account</p>
+
+              <b-dropdown v-model="isPrivate" hoverable aria-role="list">
+                <button class="button" type="button" slot="trigger">
+                  <template v-if="isPrivate">
+                    <p>
+                      <b>Private Account</b>
+                    </p>
+                  </template>
+                  <template v-else>
+                    <p><b>Stock Account</b></p>
+                  </template>
+                  <i class="fa fa-caret-down caret" />
+                </button>
+                <b-dropdown-item :value="true" aria-role="listitem">
+                  <div class="media">
+                    <div class="media-content">
+                      <p>
+                        <b>Private:</b> ${{ user ? user.userBalance : '' }}
+                      </p>
+                    </div>
+                  </div>
+                </b-dropdown-item>
+                <b-dropdown-item :value="false" aria-role="listitem">
+                  <div class="media">
+                    <div class="media-content">
+                      <p><b>Stock:</b> ${{ user ? user.stockBalance : '' }}</p>
+                    </div>
+                  </div>
+                </b-dropdown-item>
+              </b-dropdown>
+              <p class="subtitle">To User</p>
+              <div class="control has-icons-left">
+                <input v-model="toUsername" v-if="!missingUsername" class="input is-medium" type="username" placeholder="Username">
+                <input v-model="toUsername" v-if="missingUsername" class="input is-medium is-danger" type="username" placeholder="Username">
+                <p v-if="missingUsername" class="help is-danger">Field cannot be empty!</p>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-user"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <p class="subtitle">Amount</p>
+              <div class="control has-icons-left">
+                <input v-model="amount" v-if="!missingAmount" class="input is-medium" type="number" placeholder="Amount">
+                <input v-model="amount" v-if="missingAmount" class="input is-danger is-medium" type="number" placeholder="Amount">
+                <p v-if="missingAmount" class="help is-danger">Field cannot be empty or contain letters!</p>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-dollar"></i>
+                </span>
+              </div>
+            </div>
+            <button v-on:click="sendMoney" class="button is-block loginblock">Send</button>
+            <hr>
+          </form>
+          <b-notification v-if="!userExists" type="is-warning" class="notification" has-icon>
+            <h1>User does not exist!</h1>
+          </b-notification>
+          <br>
+        </div>
+      </div>
     </div>
   </div>
 </div>

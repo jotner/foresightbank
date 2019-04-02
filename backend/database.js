@@ -74,20 +74,30 @@ let getUserFromRequest = request => {
 
 app.post('/transactions', function(request, response) {
   getUserFromRequest(request).then(user => {
+    let message = {}
+    let from = request.body.from
+    let to = request.body.to
+    let amount = request.body.amount
+
     // get accountInfo
-    db.all('SELECT * FROM accounts WHERE userId = ?', [user.userId]).then(accountInfo => {
+    db.all('SELECT * FROM accounts WHERE userId = ? AND id = ?', [user.userId, request.body.idFrom]).then(accountInfo => {
       // get username
-      db.all('SELECT username FROM users WHERE id = ?', [user.userId]).then(userInfo => {
-        // merges the username in the same object as accountInfo
-        accountInfo[0].username = userInfo[0].username
-        if (request.body) {
-          let transactionInfo = request.body
-          db.all('UPDATE accounts SET userBalance = ? WHERE userId = ?', [accountInfo[0].userBalance + transactionInfo.amount, user.userId])
-          db.all('UPDATE accounts SET stockBalance = ? WHERE userId = ?', [accountInfo[0].stockBalance - transactionInfo.amount, user.userId])
+      if (request.body) {
+        if (amount > 0 && amount !== undefined) {
+          if (accountInfo[0].balance >= amount) {
+            console.log('hej')
+            db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
+            db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
+            message.success = "Transaction Completed"
+          } else {
+            message.error = 'Insufficient funds.'
+          }
+        } else {
+          message.error = 'Write a positive number!'
         }
-        // sends accountInfo
-        response.send(accountInfo[0])
-      })
+      }
+      // sends accountInfo
+      response.send(message)
     })
   })
 })
@@ -99,7 +109,6 @@ app.delete('/deletedbankaccount', function(request, response) {
     response.send('Deleted')
   })
 })
-
 
 app.post('/management', function(request, response) {
   let name = request.body.name
@@ -119,7 +128,6 @@ app.get('/registeraccount', function(request, response) {
     })
   })
 })
-
 
 app.post('/login', function(request, response) {
   let inputPassword = request.body.password
@@ -227,17 +235,17 @@ app.put('/payments/:balance', function(request, response) {
 
 })
 
-
 // Register function. Generates a cryptic version of your desired password.
 app.post('/register', function(request, response) {
   let username = request.body.username
   let inputPassword = request.body.password
   let id = uuidv4()
+  let randomBalance = Math.floor(Math.random() * 10000)
   let salt = "testsalt"
   let password = hashPassword(inputPassword, salt)
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
-      db.run('INSERT INTO accounts(userId, name, balance) VALUES(?, "Private Account", 0)', [id])
+      db.run('INSERT INTO accounts(userId, name, balance) VALUES(?, "Private Account", ?)', [id, randomBalance])
         .then(() => {
           response.send('You are now registered as ' + request.body.username + '.')
         })
