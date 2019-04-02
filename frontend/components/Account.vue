@@ -50,23 +50,6 @@
       <div v-for="account in accounts" :key="account.id" class="panel">
         <p class="panel-heading is-size-4">
           <span v-if="user">{{account.name}} - {{account.balance}}$</span>
-          <b-dropdown position="is-bottom-right" aria-role="menu">
-            <a class="navbar-item" slot="trigger" role="button">
-              <span>Deposit<i class="fa fa-caret-down"></i></span>
-              <b-icon icon="menu-down"></b-icon>
-            </a>
-            <b-dropdown-item aria-role="menu-item" custom paddingless>
-              <form action="">
-                <div class="modal-card">
-                  <section class="modal-card-body">
-                    <input v-model="amount" class="input" type="text" placeholder="Deposit amount">
-                    <a v-on:click="transaction" class="button">Deposit</a>
-                    <hr class="dropdown-divider">
-                  </section>
-                </div>
-              </form>
-            </b-dropdown-item>
-          </b-dropdown>
         </p>
       </div>
     </div>

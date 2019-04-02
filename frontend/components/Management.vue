@@ -11,6 +11,41 @@
       </div>
     </div>
 
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-brand">
+          <span class="navbar-burger burger" data-target="navbarMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </div>
+        <div id="navbarMenu" class="navbar-menu">
+          <div class="navbar-start">
+            <div class="tabs is-right">
+              <ul>
+                <li>
+                  <router-link to="/account">My Account</router-link>
+                </li>
+                <li>
+                  <router-link to="/account/stocks">Stocks and Bonds</router-link>
+                </li>
+                <li>
+                  <router-link to="/account/management">Management</router-link>
+                </li>
+                <li>
+                  <router-link to="/account/payments">Payments</router-link>
+                </li>
+                <li>
+                  <router-link to="/account/settings">Settings</router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <section class="hero is-white" v-if="accounts && accounts.length === 2">
       <div class="hero-body">
         <div class="container">
@@ -36,11 +71,13 @@
                 </b-radio>
               </div>
               <b-input
-                type="number"
                 v-model="amount"
                 style="width:400px;"
                 placeholder="Amount"
               />
+              <b-notification v-if="error" type="is-warning" class="notification" has-icon>
+                <h1>{{ error }}</h1>
+              </b-notification>
             </div>
 
             <div class="column is-5">
@@ -97,7 +134,7 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="title is-4">
-            Create new account
+            Open new account
           </h2>
           <div class="columns">
             <div class="column">
@@ -135,6 +172,7 @@
               <p class="title is-5"><span class="has-text-weight-light">Account name | </span>{{ account.name }}</p>
               <p class="title is-5"><span class="has-text-weight-light">Account balance | </span>{{ account.balance }}$</p>
               <a
+                v-if="account.name !== 'Private Account'"
                 class="button is-danger"
                 v-on:click="deleteBankAccount(account.id)"
               >Delete</a>
@@ -158,6 +196,7 @@
         radioFrom:null,
         radioTo:null,
         amount:null,
+        error:null,
       }
     },
     created() {
@@ -168,6 +207,11 @@
       fetch('/api/registeraccount/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
         .then(result => {
           this.accounts = result
+        }),
+      fetch('/api/transactions/').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
+        .then(result => {
+          this.error = result
+          console.log(this.error);
         })
 
     },
@@ -180,6 +224,8 @@
             'Content-Type': 'application/json'
           },
           method: 'DELETE'
+        }).then(()=>{
+          location.reload()
         })
       },
       newBankAccountName(){
@@ -190,6 +236,8 @@
             'Content-Type': 'application/json'
           },
           method: 'POST'
+        }).then(()=>{
+          location.reload()
         })
       },
       transaction(from,to,amount,id) {
@@ -199,13 +247,14 @@
           to:to,
           idFrom: id
         }
-        console.log(transactionInfo);
         fetch('/api/transactions/', {
           body: JSON.stringify(transactionInfo),
           headers: {
             'Content-Type': 'application/json'
           },
           method: 'POST'
+        }).then(()=>{
+          location.reload()
         })
       }
     }
