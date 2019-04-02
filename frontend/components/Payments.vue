@@ -97,7 +97,6 @@
         <h1>Transaction complete!</h1>
       </b-notification>
       <br>
-      </nav>
       <div class="columns is-centered settings-bg">
         <div class="column is-4">
           <form>
