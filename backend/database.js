@@ -148,12 +148,12 @@ app.delete('/logout', function(request, response) {
   let activeToken = request.get('Cookie')
   let strippedtoken = activeToken.split('token=')
   let finToken = strippedtoken[1]
+  response.clearCookie("token")
+  response.redirect('/')
   db.run('DELETE FROM tokens WHERE token = ?',
     finToken).then(() => {
     response.send('Logged out!')
   })
-  response.clearCookie("token")
-  response.redirect('/')
 })
 
 // Delete user
@@ -173,8 +173,16 @@ app.delete('/delete/:alias', function(request, response) {
 app.put('/updatename/:alias', function(request, response) {
   let alias = request.params.alias
   let name = request.body.username
-  db.run('UPDATE users SET username=? WHERE username=?;', [name, alias]).then(() => {
-    response.send('Username changed.')
+  db.all('SELECT username FROM users WHERE username=?;', [name]).then(rows => {
+    console.log(rows);
+    if (rows.length > 0) {
+      response.status(400).send()
+
+    } else {
+      db.run('UPDATE users SET username=? WHERE username=?;', [name, alias]).then(() => {
+        response.send('Username changed.')
+      })
+    }
   })
 })
 
@@ -189,27 +197,25 @@ app.put('/updatepass/:alias', function(request, response) {
   })
 })
 
-app.put('/updatebalance/:balance', function(request, response) {
+app.put('/payments/:balance', function(request, response) {
   let oldBalance = request.params.balance
-  let amountSent = request.body.balance
+  let amountSent = request.body.amountSent
   let userId = request.body.userId
-  let recievingUser = request.body.username
+  let recievingUser = request.body.recievingUser
   let newBalance = oldBalance - amountSent
+  let accountName = request.body.accountName
 
   db.all('SELECT username FROM users WHERE username=?;', [recievingUser]).then(rows => {
-    console.log(rows);
     if (rows.length > 0) {
-      db.run('UPDATE accounts SET userBalance=? WHERE userId=?;', [newBalance, userId]).then(() => {
+      db.run('UPDATE accounts SET balance=? WHERE userId=? AND name=?;', [newBalance, userId, accountName]).then(() => {
         console.log('User balance updated.')
       })
       db.all('SELECT id FROM users WHERE username = ?', [recievingUser]).then((userId) => {
-        console.log(userId);
-        db.all('SELECT userBalance FROM accounts WHERE userId = ?', [userId[0].id]).then((userBalance) => {
-          let recievingBalance = Number(userBalance[0].userBalance) + Number(amountSent)
-          console.log(recievingBalance);
-          db.run('UPDATE accounts WHERE name=? AND userId=? SET balance=?;', ['Private Account', userId[0].id, recievingBalance]).then(() => {
+        db.all('SELECT balance FROM accounts WHERE userId = ? AND name=?', [userId[0].id, 'Private Account']).then((balance) => {
+          let recievingBalance = Number(balance[0].balance) + Number(amountSent)
+          db.run('UPDATE accounts SET balance=? WHERE name=? AND userId=?;', [recievingBalance, 'Private Account', userId[0].id]).then(() => {
             response.status(200)
-            response.send('Balance updated.')
+            response.send('Recieving user balance updated.')
           })
         })
       })

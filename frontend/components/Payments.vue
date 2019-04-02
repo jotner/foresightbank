@@ -46,54 +46,36 @@
     </div>
   </nav>
   <div class="columns is-centered settings-bg">
-
     <div class="column is-4">
       <form>
+        <p>Send money from your account to any registered user you would like.<br>The money will be sent to the chosen users' main account instantly.</p>
         <div class="field">
           <p class="subtitle">Select Account</p>
+          <b-field v-if="!accountError">
+            <b-select v-model="selectedAccount" placeholder="My Accounts" expanded>
+              <option v-for="account in accounts" :key="account.id" :value="account">
+                {{ account.name }}: ${{account.balance}}
+              </option>
+            </b-select>
+          </b-field>
 
-          <b-dropdown v-model="isPrivate" hoverable aria-role="list">
-            <button class="button" type="button" slot="trigger">
-              <template v-if="isPrivate">
-
-                <p><b>Private Account</b>
-                </p>
-              </template>
-              <template v-else>
-                <p><b>Stock Account</b></p>
-              </template>
-              <i class="fa fa-caret-down caret"></i>
-            </button>
-
-            <b-dropdown-item :value="true" aria-role="listitem">
-              <div class="media">
-                <div class="media-content">
-                  <p><b>Private:</b> ${{ user ? user.userBalance : '' }}
-                  </p>
-                </div>
-              </div>
-            </b-dropdown-item>
-
-            <b-dropdown-item :value="false" aria-role="listitem">
-              <div class="media">
-                <div class="media-content">
-                  <p><b>Stock:</b> ${{ user ? user.stockBalance : '' }}</p>
-                </div>
-              </div>
-            </b-dropdown-item>
-          </b-dropdown>
-          <p class="subtitle">To User</p>
+          <b-field type="is-danger" v-if="accountError">
+            <b-select v-model="selectedAccount" type="is-danger" placeholder="My Accounts" expanded>
+              <option v-for="account in accounts" :key="account.id" :value="account">
+                {{ account.name }}: ${{account.balance}}
+              </option>
+            </b-select>
+          </b-field>
+          <p class="subtitle">To</p>
           <div class="control has-icons-left">
-            <input v-model="toUsername" v-if="!missingUsername" class="input is-medium" type="username" placeholder="Username">
-            <input v-model="toUsername" v-if="missingUsername" class="input is-medium is-danger" type="username" placeholder="Username">
+            <input v-model="recievingUser" v-if="!missingUsername" class="input is-medium" type="username" placeholder="Username">
+            <input v-model="recievingUser" v-if="missingUsername" class="input is-medium is-danger" type="username" placeholder="Username">
             <p v-if="missingUsername" class="help is-danger">Field cannot be empty!</p>
             <span class="icon is-small is-left">
               <i class="fa fa-user"></i>
             </span>
           </div>
-
         </div>
-
         <div class="field">
           <p class="subtitle">Amount</p>
           <div class="control has-icons-left">
@@ -105,16 +87,17 @@
             </span>
           </div>
         </div>
-        <button v-on:click="sendMoney" class="button is-block loginblock">Send</button>
+        <button v-on:click="sendMoney" class="button is-medium is-block loginblock">Pay</button>
         <hr>
       </form>
       <b-notification v-if="!userExists" type="is-warning" class="notification" has-icon>
         <h1>User does not exist!</h1>
       </b-notification>
-
+      <b-notification v-if="success" type="is-success" class="notification" has-icon>
+        <h1>Transaction complete!</h1>
+      </b-notification>
       <br>
     </div>
-
   </div>
 </div>
 </template>
@@ -136,6 +119,10 @@ form {
 
 .settings-container {
   margin-top: 20px;
+}
+
+.field {
+  text-align: center;
 }
 
 .delete-button {
@@ -189,88 +176,86 @@ form {
 <script>
 export default {
   created() {
-    fetch('/api/account').then(response => response.json()) // Fetching accountInfo from/account and stores the json object in this.user key
-      .then(result => {
+    fetch('/api/account').then(response => response.json()).
+    then(result => {
         this.user = result
-        this.stockBalance = this.user.stockBalance
-        this.privateBalance = this.user.userBalance
         this.userId = this.user.userId
+      }),
+      fetch('/api/registeraccount/').then(response => response.json())
+      .then(result => {
+        this.accounts = result
       })
   },
   data() {
     return {
-      isPrivate: true,
+      accounts: null,
+      selectedAccount: null,
       userId: null,
       user: null,
-      toUsername: null,
+      recievingUser: null,
       amount: null,
       userExists: true,
+      accountError: false,
+      success: false,
       missingUsername: false,
       missingAmount: false,
-      privateBalance: null,
-      stockBalance: null,
     }
   },
   methods: {
     sendMoney() {
       this.userExists = true
-      this.success = false
+      this.accountError = false
       this.missingAmount = false
       this.missingUsername = false
-      if (!this.amount && !this.toUsername) {
+      if (!this.amount && !this.recievingUser && !this.selectedAccount) {
         this.missingUsername = true
         this.missingAmount = true
-      } else if (!this.toUsername) {
+        this.accountError = true
+      } else if (!this.recievingUser) {
         this.missingUsername = true
         this.missingAmount = false
+        this.accountError = false
       } else if (!this.amount) {
         this.missingAmount = true
+        this.missingUsername = false
+        this.accountError = false
+      } else if (!this.selectedAccount) {
+        this.accountError = true
+        this.missingAmount = false
         this.missingUsername = false
       } else {
         this.missingUsername = false
         this.missingAmount = false
       }
       // Continue to register if all inputs are not empty
-      if (this.toUsername && this.amount) {
-        if (this.isPrivate) {
-          if (this.privateBalance >= this.amount && this.amount >= 0) {
-            let info = {
-              balance: this.amount,
-              userId: this.userId,
-              username: this.toUsername
-            }
-            fetch('/api/updatebalance/' + this.privateBalance, {
-                body: JSON.stringify(info),
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                method: 'PUT'
-              })
-              .then(response => {
-                if (response.status === 200) {
-                  this.$toast.open({
-                    message: 'Transaction complete!',
-                    type: 'is-success',
-                    duration: 4000,
-                  })
-                } else {
-                  this.userExists = false
-                }
-
-              })
-          } else {
-            this.$toast.open({
-              message: 'Insufficient funds!',
-              type: 'is-danger',
-              duration: 4000,
+      if (this.recievingUser && this.amount) {
+        if (this.selectedAccount.balance >= this.amount && this.amount >= 1) {
+          let info = {
+            amountSent: this.amount,
+            userId: this.userId,
+            recievingUser: this.recievingUser,
+            accountName: this.selectedAccount.name
+          }
+          fetch('/api/payments/' + this.selectedAccount.balance, {
+              body: JSON.stringify(info),
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: 'PUT'
             })
-          }
-        } else if (!this.isPrivate) {
-          if (this.stockBalance >= this.amount && this.amount >= 0) {
-            alert('you have more than enough')
-          } else {
-            alert('kuk')
-          }
+            .then(response => {
+              if (response.ok) {
+                this.success = true
+              } else {
+                this.userExists = false
+              }
+            })
+        } else {
+          this.$toast.open({
+            message: 'Insufficient funds!',
+            type: 'is-danger',
+            duration: 4000,
+          })
         }
       }
     }

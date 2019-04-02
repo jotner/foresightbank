@@ -7,7 +7,7 @@
           <h3>Welcome to Foresight Bank, <span class="user">{{ username }}</span>!</h3>
           <p>You can now
             <a>
-              <router-link to="/login">log in</router-link>
+              <router-link to="/login"><u>log in</u></router-link>
             </a> to access your newly created account.</p>
         </div>
         <div class="column is-4 is-offset-4">

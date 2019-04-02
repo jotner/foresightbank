@@ -48,7 +48,6 @@
                   </a>
                 </li>
               </ul>
-
             </div>
           </div>
         </div>
@@ -63,12 +62,13 @@ export default {
   created() {
     eventBus.$on('show-online', (payload) => {
       this.userOnline = payload.online
-      this.user.username = payload.user
+      this.user = {
+        username: payload.user
+      }
     })
-
     fetch('/api/account').then(response => response.json())
       .then(result => {
-        this.user = result
+        this.user = typeof result === 'object' ? result : null
         this.userOnline = true
       })
   },

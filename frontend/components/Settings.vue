@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="section product-header">
+  <div class="section product-header">
     <div class="container">
       <div class="columns">
         <div class="column">
@@ -50,7 +50,7 @@
       <div class="column is-4">
         <form>
           <div class="field">
-            <p>If you would like to change your username or password you can do so by filling in either of the forms listed below.</p>
+            <p>If you would like to change your username or password you can do so by filling out either of the fields below.</p>
             <p class="subtitle">Change Username</p>
             <div class="control has-icons-left">
               <input v-model="changeUsername" v-if="!missingUsername" class="input is-medium" type="username" placeholder="New Username">
@@ -59,13 +59,14 @@
               <span class="icon is-small is-left">
                 <i class="fa fa-user"></i>
               </span>
-
             </div>
-
           </div>
-          <button v-on:click="changeName" class="button is-block loginblock">Save changes</button>
+          <button v-on:click="changeName" class="button is-block loginblock">Update username</button>
           <b-notification v-if="usernameSuccess" type="notification is-success" class="notification" has-icon>
-            <h1>Username changed!</h1>
+            <h1>Username updated!</h1>
+          </b-notification>
+          <b-notification v-if="userExists" type="notification is-danger" class="notification" has-icon>
+            <h1>Username is already taken!</h1>
           </b-notification>
           <hr>
           <div class="field">
@@ -79,17 +80,16 @@
               </span>
             </div>
           </div>
-          <button v-on:click="changePass" class="button is-block loginblock">Save changes</button>
+          <button v-on:click="changePass" class="button is-block loginblock">Update password</button>
           <b-notification v-if="passwordSuccess" type="notification is-success" class="notification" has-icon>
-            <h1>Password changed!</h1>
+            <h1>Password updated!</h1>
           </b-notification>
           <hr>
           <p>If you no longer need your Foresight Bank account you can permanently delete it.</p>
           <p>Please make sure that all your funds and stocks have been transferred before deleting.</p>
-          <p>Canceling your account will delete your account, including all data permanently. This cannot be undone.</p><br>
+          <p>Deleting your account will delete everything, including all data permanently. This cannot be undone.</p><br>
           <button v-on:click="deleteAcc" class="button is-block delete-button">Delete account</button>
         </form>
-
         <br>
       </div>
     </div>
@@ -161,20 +161,20 @@ export default {
   },
   data() {
     return {
-      user: null,
       changeUsername: null,
       changePassword: null,
       missingUsername: false,
       missingPassword: false,
       usernameSuccess: false,
       passwordSuccess: false,
+      userExists: false,
       showOnline: true
     }
   },
   methods: {
     deleteAcc() {
       let confirmed = confirm("Are you sure you want to delete your account?");
-      if (confirmed == true) {
+      if (confirmed === true) {
         let deleteUsername = this.username
         fetch('/api/logout/', {
           method: 'DELETE'
@@ -186,11 +186,15 @@ export default {
             this.$router.push({
               path: '/'
             })
-            location.reload()
+            this.showOnline = false
+            eventBus.$emit('show-online', {
+              online: this.showOnline,
+            })
           })
       }
     },
     changeName() {
+      this.userExists = false
       this.usernameSuccess = false
       this.passwordSuccess = false
       this.missingPassword = false
@@ -210,12 +214,16 @@ export default {
             },
             method: 'PUT'
           })
-          .then(() => {
-            this.usernameSuccess = true
-            eventBus.$emit('show-online', {
-              online: this.showOnline,
-              user: this.changeUsername
-            })
+          .then((response) => {
+            if (response.ok) {
+              this.usernameSuccess = true
+              eventBus.$emit('show-online', {
+                online: this.showOnline,
+                user: this.changeUsername
+              })
+            } else {
+              this.userExists = true
+            }
           })
       }
     },
