@@ -36,6 +36,7 @@
                 </b-radio>
               </div>
               <b-input
+                type="number"
                 v-model="amount"
                 style="width:400px;"
                 placeholder="Amount"

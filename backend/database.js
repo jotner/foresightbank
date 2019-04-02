@@ -228,11 +228,12 @@ app.post('/register', function(request, response) {
   let username = request.body.username
   let inputPassword = request.body.password
   let id = uuidv4()
+  let randomBalance = Math.floor(Math.random() * 10000)
   let salt = "testsalt"
   let password = hashPassword(inputPassword, salt)
   db.run('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [id, username, password])
     .then(() => {
-      db.run('INSERT INTO accounts(userId, name, balance) VALUES(?, "Private Account", 0)', [id])
+      db.run('INSERT INTO accounts(userId, name, balance) VALUES(?, "Private Account", ?)', [id, randomBalance])
         .then(() => {
           response.send('You are now registered as ' + request.body.username + '.')
         })

@@ -49,10 +49,10 @@
     <div class="column">
       <div v-for="account in accounts" :key="account.id" class="panel">
         <p class="panel-heading is-size-4">
-          <span v-if="user">{{account.name}} - {{account.balance}}kr</span>
+          <span v-if="user">{{account.name}} - {{account.balance}}$</span>
           <b-dropdown position="is-bottom-right" aria-role="menu">
             <a class="navbar-item" slot="trigger" role="button">
-              <span>Transactions<i class="fa fa-caret-down"></i></span>
+              <span>Deposit<i class="fa fa-caret-down"></i></span>
               <b-icon icon="menu-down"></b-icon>
             </a>
             <b-dropdown-item aria-role="menu-item" custom paddingless>
