@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="hero is-medium">
+  <div class="hero is-large">
     <div class="hero-body is-large herobg">
       <div class="container has-text-centered">
         <h1 class="title-index">

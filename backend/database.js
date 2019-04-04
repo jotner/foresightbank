@@ -85,7 +85,6 @@ app.post('/transactions', function(request, response) {
       if (request.body) {
         if (amount > 0 && amount !== undefined) {
           if (accountInfo[0].balance >= amount) {
-            console.log('hej')
             db.all('UPDATE accounts SET balance = balance - ? WHERE userId = ? AND name = ?', [amount, user.userId, from])
             db.all('UPDATE accounts SET balance = balance + ? WHERE userId = ? AND name = ?', [amount, user.userId, to])
             message.success = "Transaction Completed"
@@ -182,7 +181,6 @@ app.put('/updatename/:alias', function(request, response) {
   let alias = request.params.alias
   let name = request.body.username
   db.all('SELECT username FROM users WHERE username=?;', [name]).then(rows => {
-    console.log(rows);
     if (rows.length > 0) {
       response.status(400).send()
 
@@ -205,7 +203,7 @@ app.put('/updatepass/:alias', function(request, response) {
   })
 })
 
-app.put('/payments/:balance', function(request, response) {
+app.post('/payments/:balance', function(request, response) {
   let oldBalance = request.params.balance
   let amountSent = request.body.amountSent
   let userId = request.body.userId
