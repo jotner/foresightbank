@@ -266,5 +266,7 @@
 </script>
 
 <style scoped>
-
+.tabs ul {
+  border-bottom-width: 0px;
+}
 </style>

@@ -103,6 +103,11 @@ export default {}
 </script>
 
 <style scoped>
+
+.tabs ul {
+  border-bottom-width: 0px;
+}
+
 .table {
   margin-top: 23px;
   margin-bottom: 23px;
