@@ -7,7 +7,7 @@
           A personal bank for everyday people
         </h1>
         <h2 class="subtitle-index">
-          Foresight Bank offers the most flexible bank in the world. Big companies, small companies or individuals, we have everything for everyone.
+          Foresight Bank offers the most flexible bank in the world.
         </h2>
       </div>
     </div>
