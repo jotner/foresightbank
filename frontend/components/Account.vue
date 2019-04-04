@@ -53,7 +53,7 @@
           </p>
         </div>
       </div>
-    </div>  
+    </div>
     <div id="securehero" class="hero is-small">
       <div class="hero-body secbg">
         <div class="container has-text-centered">
@@ -111,6 +111,11 @@ b-dropdown {
 .tabs a {
   display: inline-block;
 }
+
+.tabs ul {
+  border-bottom-width: 0px;
+}
+
 </style>
 
 <script>
