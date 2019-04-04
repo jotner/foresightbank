@@ -133,24 +133,8 @@ b-dropdown {
     data() {
       return {
         user: null,
-        amount: null,
         accounts: null,
       }
     },
-    methods: {
-      transaction() {
-        let transactionInfo = {
-          amount: Number(this.amount)
-        }
-
-        fetch('/api/transactions/', {
-          body: JSON.stringify(transactionInfo),
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          method: 'POST'
-        })
-      }
-    }
   }
 </script>

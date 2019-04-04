@@ -212,9 +212,7 @@ app.post('/payments/:balance', function(request, response) {
 
   db.all('SELECT username FROM users WHERE username=?;', [recievingUser]).then(rows => {
     if (rows.length > 0) {
-      db.run('UPDATE accounts SET balance=? WHERE userId=? AND name=?;', [newBalance, userId, accountName]).then(() => {
-        console.log('User balance updated.')
-      })
+      db.run('UPDATE accounts SET balance=? WHERE userId=? AND name=?;', [newBalance, userId, accountName]).then(() => {})
       db.all('SELECT id FROM users WHERE username = ?', [recievingUser]).then((userId) => {
         db.all('SELECT balance FROM accounts WHERE userId = ? AND name=?', [userId[0].id, 'Private Account']).then((balance) => {
           let recievingBalance = Number(balance[0].balance) + Number(amountSent)
@@ -248,12 +246,9 @@ app.post('/register', function(request, response) {
         })
     })
     .catch(error => {
-      console.log(error)
       response.status(409)
       response.send('User already exists.')
     })
 })
 
-app.listen(3000, function() {
-  console.log('The service is running!')
-})
+app.listen(3000, function() {})
